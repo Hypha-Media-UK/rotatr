@@ -1,0 +1,121 @@
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: rotatr-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_DATABASE: rotatr_db
+      MYSQL_USER: rotatr_user
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+      - ./database/config/my.cnf:/etc/mysql/conf.d/my.cnf
+    secrets:
+      - mysql_root_password
+      - mysql_password
+    networks:
+      - rotatr-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Backend API Server
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rotatr-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: rotatr_db
+      DB_USER: rotatr_user
+      DB_PASSWORD_FILE: /run/secrets/mysql_password
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      CORS_ORIGIN: http://localhost:5173
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    secrets:
+      - mysql_password
+      - jwt_secret
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - rotatr-network
+    command: npm run dev
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: rotatr-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rotatr-network
+
+  # Frontend Vue Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rotatr-frontend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      VITE_API_BASE_URL: http://localhost:3001/api
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - rotatr-network
+    command: npm run dev -- --host 0.0.0.0
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  rotatr-network:
+    driver: bridge
+
+secrets:
+  mysql_root_password:
+    file: ./docker/secrets/mysql_root_password.txt
+  mysql_password:
+    file: ./docker/secrets/mysql_password.txt
+  jwt_secret:
+    file: ./docker/secrets/jwt_secret.txt
