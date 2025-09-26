@@ -46,8 +46,8 @@ export interface Shift {
   name: string
   start_time: string
   end_time: string
-  shift_type: 'Day' | 'Night'
-  shift_ident: 'A' | 'B' | 'C' | 'D'
+  shift_type: 'Day' | 'Night' | 'Relief'
+  shift_ident: 'A' | 'B' | 'C' | 'D' | 'R'
   days_on: number
   days_off: number
   offset_days: number
@@ -150,8 +150,8 @@ export interface ShiftForm {
   name: string
   start_time: string
   end_time: string
-  shift_type: 'Day' | 'Night'
-  shift_ident: 'A' | 'B' | 'C' | 'D'
+  shift_type: 'Day' | 'Night' | 'Relief'
+  shift_ident: 'A' | 'B' | 'C' | 'D' | 'R'
   days_on: number
   days_off: number
   offset_days: number
@@ -179,9 +179,9 @@ export interface ConfigureState {
 // Utility Types
 export type DayOfWeek = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday'
 
-export type ShiftType = 'Day' | 'Night'
+export type ShiftType = 'Day' | 'Night' | 'Relief'
 
-export type ShiftIdent = 'A' | 'B' | 'C' | 'D'
+export type ShiftIdent = 'A' | 'B' | 'C' | 'D' | 'R'
 
 export type PorterType = 'Porter' | 'Supervisor'
 

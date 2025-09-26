@@ -1,7 +1,6 @@
 /**
  * Utility functions for date calculations in the Porter Shift Management System
  */
-// @ts-nocheck
 
 /**
  * Calculate the difference in days between two dates

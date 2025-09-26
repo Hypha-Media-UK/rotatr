@@ -43,8 +43,8 @@ export interface Shift {
   name: string
   start_time: string
   end_time: string
-  shift_type: 'Day' | 'Night'
-  shift_ident: 'A' | 'B' | 'C' | 'D'
+  shift_type: 'Day' | 'Night' | 'Relief'
+  shift_ident: 'A' | 'B' | 'C' | 'D' | 'R'
   days_on: number
   days_off: number
   offset_days: number
@@ -146,8 +146,8 @@ export interface CreateShiftRequest {
   name: string
   start_time: string
   end_time: string
-  shift_type: 'Day' | 'Night'
-  shift_ident: 'A' | 'B' | 'C' | 'D'
+  shift_type: 'Day' | 'Night' | 'Relief'
+  shift_ident: 'A' | 'B' | 'C' | 'D' | 'R'
   days_on: number
   days_off: number
   offset_days: number
@@ -224,8 +224,8 @@ export interface DatabaseConfig {
 
 // Utility Types
 export type DayOfWeek = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday'
-export type ShiftType = 'Day' | 'Night'
-export type ShiftIdent = 'A' | 'B' | 'C' | 'D'
+export type ShiftType = 'Day' | 'Night' | 'Relief'
+export type ShiftIdent = 'A' | 'B' | 'C' | 'D' | 'R'
 export type PorterType = 'Porter' | 'Supervisor'
 export type AbsenceType = 'Annual Leave' | 'Sickness' | 'Appointment'
 export type AssignmentType = 'Floor Staff' | 'Relief Cover' | 'Department' | 'Shift'

@@ -1,5 +1,5 @@
 import { config } from 'dotenv'
-import { initializeDatabase } from '@/utils/database'
+import { initializeDatabase, database } from '@/utils/database'
 import { cache } from '@/utils/cache'
 
 // Load test environment variables
@@ -9,16 +9,16 @@ config({ path: '.env.test' })
 beforeAll(async () => {
   // Set test environment
   process.env.NODE_ENV = 'test'
-  
+
   // Initialize test database connection
   try {
-    const database = await initializeDatabase()
-    await database.connect()
+    const db = await initializeDatabase()
+    await db.connect()
     console.log('✅ Test database connected')
   } catch (error) {
     console.error('❌ Test database connection failed:', error)
   }
-  
+
   // Initialize test cache connection
   try {
     await cache.connect()
@@ -37,7 +37,7 @@ afterAll(async () => {
   } catch (error) {
     console.error('❌ Test database disconnect failed:', error)
   }
-  
+
   // Clean up cache connection
   try {
     await cache.disconnect()

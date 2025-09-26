@@ -3,7 +3,7 @@
     <div class="modal" @click.stop>
       <div class="modal-header">
         <h2 class="modal-title">
-          
+
           {{ isEditing ? 'Edit Department' : 'Add Department' }}
         </h2>
         <button @click="$emit('cancel')" class="close-btn">✕</button>
@@ -58,6 +58,7 @@
         <div v-if="!formData.is_24_7" class="form-section">
           <h3 class="section-title">Operating Schedule</h3>
           <p class="section-description">Define when this department operates during the week</p>
+
 
           <div class="schedules-container">
             <div
@@ -293,10 +294,19 @@ watch(() => formData.value.is_24_7, (is24_7) => {
 // Lifecycle
 onMounted(() => {
   if (props.department) {
+    console.log('DepartmentModal - Received department:', JSON.stringify(props.department, null, 2))
+    console.log('DepartmentModal - Department schedules length:', props.department.schedules?.length)
+    console.log('DepartmentModal - Department schedules:', JSON.stringify(props.department.schedules, null, 2))
+    console.log('DepartmentModal - Department is_24_7:', props.department.is_24_7)
+
     formData.value = {
       ...props.department,
       schedules: props.department.schedules ? [...props.department.schedules] : []
     }
+
+    console.log('DepartmentModal - FormData after setup:', JSON.stringify(formData.value, null, 2))
+    console.log('DepartmentModal - FormData schedules length:', formData.value.schedules?.length)
+    console.log('DepartmentModal - FormData is_24_7:', formData.value.is_24_7)
 
     // Ensure at least one schedule for non-24/7 departments
     if (!formData.value.is_24_7 && (!formData.value.schedules || formData.value.schedules.length === 0)) {
@@ -308,6 +318,7 @@ onMounted(() => {
           porters_required: formData.value.default_porters_required
         }
       ]
+      console.log('DepartmentModal - Added default schedule for non-24/7 department')
     }
   }
 })

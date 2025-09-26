@@ -175,15 +175,48 @@ const createDatabaseConfig = async (): Promise<DatabaseConfig> => {
 }
 
 // Initialize database with async configuration
-let database: Database | undefined
+let databaseInstance: Database | undefined
 
 const initializeDatabase = async (): Promise<Database> => {
-  if (!database) {
+  if (!databaseInstance) {
     const config = await createDatabaseConfig()
-    database = new Database(config)
+    databaseInstance = new Database(config)
   }
-  return database
+  return databaseInstance
 }
 
+// Export both named and default exports for compatibility
 export { initializeDatabase }
 export default initializeDatabase
+
+// Also export a singleton instance for backward compatibility
+export const database = {
+  async query<T = any>(sql: string, params?: any[]): Promise<T[]> {
+    const db = await initializeDatabase();
+    return db.query<T>(sql, params);
+  },
+  async queryOne<T = any>(sql: string, params?: any[]): Promise<T | null> {
+    const db = await initializeDatabase();
+    return db.queryOne<T>(sql, params);
+  },
+  async insert(sql: string, params?: any[]): Promise<number> {
+    const db = await initializeDatabase();
+    return db.insert(sql, params);
+  },
+  async update(sql: string, params?: any[]): Promise<number> {
+    const db = await initializeDatabase();
+    return db.update(sql, params);
+  },
+  async delete(sql: string, params?: any[]): Promise<number> {
+    const db = await initializeDatabase();
+    return db.delete(sql, params);
+  },
+  async connect(): Promise<void> {
+    const db = await initializeDatabase();
+    return db.connect();
+  },
+  async disconnect(): Promise<void> {
+    const db = await initializeDatabase();
+    return db.disconnect();
+  }
+}

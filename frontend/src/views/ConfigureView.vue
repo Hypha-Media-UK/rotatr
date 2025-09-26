@@ -60,11 +60,7 @@ import { ref, onMounted } from 'vue'
 import DepartmentManagement from '../components/DepartmentManagement.vue'
 import PorterManagement from '../components/PorterManagement.vue'
 import ShiftManagement from '../components/ShiftManagement.vue'
-// Import other components when created
-// import SystemSettings from '../components/SystemSettings.vue'
-
-// Temporary placeholder components
-const SystemSettings = { template: '<div class="placeholder">System Settings - Coming Soon</div>' }
+import SystemSettings from '../components/SystemSettings.vue'
 
 // Reactive data
 const activeTab = ref('departments')

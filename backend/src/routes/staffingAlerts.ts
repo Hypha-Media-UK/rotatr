@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Router, Request, Response } from 'express';
 import { staffingAlertService } from '@/services/staffingAlertService';
 import { ApiResponse, StaffingAlert, DepartmentStaffing, DailyStaffingOverview } from '@/types';
@@ -11,12 +10,22 @@ const router = Router();
  */
 router.get('/department/:departmentId/date/:date', async (req: Request, res: Response) => {
   try {
-    const departmentId = parseInt(req.params.departmentId!);
-    const date = req.params.date!;
+    const { departmentId: departmentIdParam, date } = req.params;
+
+    // Validate required parameters
+    if (!departmentIdParam || !date) {
+      return res.status(400).json({
+        success: false,
+        data: null,
+        errors: ['Department ID and date are required']
+      });
+    }
+
+    const departmentId = parseInt(departmentIdParam);
 
     // Validate date format
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!date || !dateRegex.test(date)) {
+    if (!dateRegex.test(date)) {
       return res.status(400).json({
         success: false,
         data: null,

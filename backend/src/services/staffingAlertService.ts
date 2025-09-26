@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { initializeDatabase } from '@/utils/database';
+import { initializeDatabase, database } from '@/utils/database';
 import { shiftCalculationService } from './shiftCalculationService';
 import { daysBetween, timeToMinutes, calculateTimeOverlap } from '@/utils/dateHelpers';
 import { 

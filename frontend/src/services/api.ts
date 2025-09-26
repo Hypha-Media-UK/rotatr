@@ -13,6 +13,16 @@ export interface Department {
   name: string
   is_24_7: boolean
   default_porters_required: number
+  created_at: string
+  updated_at: string
+  schedules?: Array<{
+    id: number
+    department_id: number
+    day_of_week: string
+    opens_at: string
+    closes_at: string
+    porters_required: number
+  }>
 }
 
 export interface Porter {
@@ -30,8 +40,8 @@ export interface Shift {
   name: string
   start_time: string
   end_time: string
-  shift_type: 'Day' | 'Night'
-  shift_ident: 'A' | 'B' | 'C' | 'D'
+  shift_type: 'Day' | 'Night' | 'Relief'
+  shift_ident: 'A' | 'B' | 'C' | 'D' | 'R'
   days_on: number
   days_off: number
   offset_days: number
@@ -153,14 +163,14 @@ class ApiClient {
     return this.request<Department>(`/departments/${id}`)
   }
 
-  async createDepartment(department: Omit<Department, 'id'>): Promise<ApiResponse<Department>> {
+  async createDepartment(department: Omit<Department, 'id' | 'created_at' | 'updated_at'>): Promise<ApiResponse<Department>> {
     return this.request<Department>('/departments', {
       method: 'POST',
       body: JSON.stringify(department),
     })
   }
 
-  async updateDepartment(id: number, department: Partial<Department>): Promise<ApiResponse<Department>> {
+  async updateDepartment(id: number, department: Partial<Omit<Department, 'id' | 'created_at' | 'updated_at'>>): Promise<ApiResponse<Department>> {
     return this.request<Department>(`/departments/${id}`, {
       method: 'PUT',
       body: JSON.stringify(department),
@@ -329,7 +339,7 @@ export const api = {
   },
 
   // Create a new department
-  async createDepartment(department: Omit<Department, 'id'>) {
+  async createDepartment(department: Omit<Department, 'id' | 'created_at' | 'updated_at'>) {
     try {
       const response = await apiClient.createDepartment(department)
       return response.success ? response.data : null
@@ -340,7 +350,7 @@ export const api = {
   },
 
   // Update an existing department
-  async updateDepartment(id: number, department: Partial<Department>) {
+  async updateDepartment(id: number, department: Partial<Omit<Department, 'id' | 'created_at' | 'updated_at'>>) {
     try {
       const response = await apiClient.updateDepartment(id, department)
       return response.success ? response.data : null

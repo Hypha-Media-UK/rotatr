@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Router, Request, Response } from 'express';
 import { shiftCalculationService } from '@/services/shiftCalculationService';
 import { ApiResponse, PorterAvailability } from '@/types';
@@ -13,9 +12,18 @@ router.get('/porter/:porterId/working-on/:date', async (req: Request, res: Respo
   try {
     const { porterId, date } = req.params;
 
+    // Validate required parameters
+    if (!porterId || !date) {
+      return res.status(400).json({
+        success: false,
+        data: null,
+        errors: ['Porter ID and date are required']
+      });
+    }
+
     // Validate date format (YYYY-MM-DD)
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!date || !dateRegex.test(date!)) {
+    if (!dateRegex.test(date)) {
       return res.status(400).json({
         success: false,
         data: null,
@@ -25,7 +33,7 @@ router.get('/porter/:porterId/working-on/:date', async (req: Request, res: Respo
 
     // Get porter from database
     const porterQuery = `
-      SELECT 
+      SELECT
         p.id, p.name, p.shift_type, p.shift_offset_days, p.regular_department_id,
         p.is_floor_staff, p.porter_type, p.guaranteed_hours, p.created_at, p.updated_at,
         d.name as department_name
@@ -34,7 +42,8 @@ router.get('/porter/:porterId/working-on/:date', async (req: Request, res: Respo
       WHERE p.id = ?
     `;
 
-    const { database } = await import('@/utils/database');
+    const { initializeDatabase } = await import('@/utils/database');
+    const database = await initializeDatabase();
     const porters = await database.query(porterQuery, [porterId]);
 
     if (porters.length === 0) {
@@ -46,7 +55,7 @@ router.get('/porter/:porterId/working-on/:date', async (req: Request, res: Respo
     }
 
     const porter = porters[0];
-    const isWorking = await shiftCalculationService.isPorterWorkingOnDate(porter, date!);
+    const isWorking = await shiftCalculationService.isPorterWorkingOnDate(porter, date);
 
     return res.json({
       success: true,
@@ -78,9 +87,18 @@ router.get('/porters-working-on/:date', async (req: Request, res: Response<ApiRe
   try {
     const { date } = req.params;
 
+    // Validate required parameters
+    if (!date) {
+      return res.status(400).json({
+        success: false,
+        data: null,
+        errors: ['Date parameter is required']
+      });
+    }
+
     // Validate date format (YYYY-MM-DD)
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!date || !dateRegex.test(date!)) {
+    if (!dateRegex.test(date)) {
       return res.status(400).json({
         success: false,
         data: null,
@@ -88,7 +106,7 @@ router.get('/porters-working-on/:date', async (req: Request, res: Response<ApiRe
       });
     }
 
-    const workingPorters = await shiftCalculationService.getPortersWorkingOnDate(date!);
+    const workingPorters = await shiftCalculationService.getPortersWorkingOnDate(date);
 
     return res.json({
       success: true,
@@ -126,9 +144,18 @@ router.get('/availability/:date', async (req: Request, res: Response<ApiResponse
   try {
     const { date } = req.params;
 
+    // Validate required parameters
+    if (!date) {
+      return res.status(400).json({
+        success: false,
+        data: null,
+        errors: ['Date parameter is required']
+      });
+    }
+
     // Validate date format (YYYY-MM-DD)
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!date || !dateRegex.test(date!)) {
+    if (!dateRegex.test(date)) {
       return res.status(400).json({
         success: false,
         data: null,
@@ -136,7 +163,7 @@ router.get('/availability/:date', async (req: Request, res: Response<ApiResponse
       });
     }
 
-    const availabilities = await shiftCalculationService.getAllPorterAvailabilities(date!);
+    const availabilities = await shiftCalculationService.getAllPorterAvailabilities(date);
 
     // Separate into working and not working
     const working = availabilities.filter(a => a.isWorking);
@@ -193,12 +220,21 @@ router.get('/porter/:porterId/next-working-day', async (req: Request, res: Respo
     const { porterId } = req.params;
     const { from_date } = req.query;
 
+    // Validate required parameters
+    if (!porterId) {
+      return res.status(400).json({
+        success: false,
+        data: null,
+        errors: ['Porter ID is required']
+      });
+    }
+
     // Default to today if no from_date provided
-    const fromDate = (from_date || new Date().toISOString().split('T')[0])!;
+    const fromDate = (from_date as string) || new Date().toISOString().split('T')[0];
 
     // Validate date format
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(fromDate as string)) {
+    if (!dateRegex.test(fromDate)) {
       return res.status(400).json({
         success: false,
         data: null,
@@ -208,7 +244,7 @@ router.get('/porter/:porterId/next-working-day', async (req: Request, res: Respo
 
     // Get porter from database
     const porterQuery = `
-      SELECT 
+      SELECT
         p.id, p.name, p.shift_type, p.shift_offset_days, p.regular_department_id,
         p.is_floor_staff, p.porter_type, p.guaranteed_hours, p.created_at, p.updated_at,
         d.name as department_name
@@ -217,7 +253,8 @@ router.get('/porter/:porterId/next-working-day', async (req: Request, res: Respo
       WHERE p.id = ?
     `;
 
-    const { database } = await import('@/utils/database');
+    const { initializeDatabase } = await import('@/utils/database');
+    const database = await initializeDatabase();
     const porters = await database.query(porterQuery, [porterId]);
 
     if (porters.length === 0) {
@@ -229,7 +266,7 @@ router.get('/porter/:porterId/next-working-day', async (req: Request, res: Respo
     }
 
     const porter = porters[0];
-    const nextWorkingDay = await shiftCalculationService.getNextWorkingDay(porter, fromDate as string);
+    const nextWorkingDay = await shiftCalculationService.getNextWorkingDay(porter, fromDate);
 
     return res.json({
       success: true,
@@ -263,6 +300,15 @@ router.get('/porter/:porterId/working-days', async (req: Request, res: Response<
     const { porterId } = req.params;
     const { start_date, end_date } = req.query;
 
+    // Validate required parameters
+    if (!porterId) {
+      return res.status(400).json({
+        success: false,
+        data: null,
+        errors: ['Porter ID is required']
+      });
+    }
+
     if (!start_date || !end_date) {
       return res.status(400).json({
         success: false,
@@ -283,7 +329,7 @@ router.get('/porter/:porterId/working-days', async (req: Request, res: Response<
 
     // Get porter from database
     const porterQuery = `
-      SELECT 
+      SELECT
         p.id, p.name, p.shift_type, p.shift_offset_days, p.regular_department_id,
         p.is_floor_staff, p.porter_type, p.guaranteed_hours, p.created_at, p.updated_at,
         d.name as department_name
@@ -292,7 +338,8 @@ router.get('/porter/:porterId/working-days', async (req: Request, res: Response<
       WHERE p.id = ?
     `;
 
-    const { database } = await import('@/utils/database');
+    const { initializeDatabase } = await import('@/utils/database');
+    const database = await initializeDatabase();
     const porters = await database.query(porterQuery, [porterId]);
 
     if (porters.length === 0) {
@@ -305,8 +352,8 @@ router.get('/porter/:porterId/working-days', async (req: Request, res: Response<
 
     const porter = porters[0];
     const workingDays = await shiftCalculationService.getWorkingDaysInRange(
-      porter, 
-      start_date as string, 
+      porter,
+      start_date as string,
       end_date as string
     );
 

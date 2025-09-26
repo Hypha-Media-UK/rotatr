@@ -262,11 +262,109 @@ describe('ShiftCalculationService', () => {
     })
   })
 
+  describe('relief porter functionality', () => {
+    it('should handle relief porters with contracted hours', async () => {
+      const reliefPorter = await testUtils.createTestPorter({
+        shift_type: 'Relief',
+        shift_offset_days: 0,
+        guaranteed_hours: 37.5,
+        is_floor_staff: false
+      })
+
+      // Add contracted hours for Monday
+      await testUtils.createContractedHours(reliefPorter.id, 'Monday', '08:00:00', '20:00:00')
+
+      const mondayDate = new Date('2024-01-01') // Assuming this is a Monday
+      const result = await service.isPorterWorkingOnDate(reliefPorter.id, mondayDate)
+
+      expect(result).toBe(true)
+    })
+
+    it('should handle relief porters with relief assignments', async () => {
+      const reliefPorter = await testUtils.createTestPorter({
+        shift_type: 'Relief',
+        shift_offset_days: 0,
+        guaranteed_hours: 37.5
+      })
+
+      const department = await testUtils.createTestDepartment()
+      const testDate = new Date('2024-01-02')
+
+      // Create relief assignment
+      await testUtils.createReliefAssignment({
+        porter_id: reliefPorter.id,
+        department_id: department.id,
+        start_date: testDate.toISOString().split('T')[0],
+        end_date: testDate.toISOString().split('T')[0],
+        assignment_type: 'Department'
+      })
+
+      const result = await service.isPorterWorkingOnDate(reliefPorter.id, testDate)
+      expect(result).toBe(true)
+    })
+
+    it('should handle relief porters with temporary assignments', async () => {
+      const reliefPorter = await testUtils.createTestPorter({
+        shift_type: 'Relief',
+        shift_offset_days: 0,
+        guaranteed_hours: 37.5
+      })
+
+      const department = await testUtils.createTestDepartment()
+      const testDate = new Date('2024-01-02')
+
+      // Create temporary assignment
+      await testUtils.createTestAssignment({
+        porter_id: reliefPorter.id,
+        department_id: department.id,
+        assignment_date: testDate.toISOString().split('T')[0],
+        start_time: '08:00:00',
+        end_time: '20:00:00',
+        assignment_type: 'Relief Cover'
+      })
+
+      const result = await service.isPorterWorkingOnDate(reliefPorter.id, testDate)
+      expect(result).toBe(true)
+    })
+
+    it('should return false for relief porter with no scheduled work', async () => {
+      const reliefPorter = await testUtils.createTestPorter({
+        shift_type: 'Relief',
+        shift_offset_days: 0,
+        guaranteed_hours: 37.5
+      })
+
+      const testDate = new Date('2024-01-02')
+      const result = await service.isPorterWorkingOnDate(reliefPorter.id, testDate)
+
+      expect(result).toBe(false)
+    })
+
+    it('should calculate availability for relief porters correctly', async () => {
+      const reliefPorter = await testUtils.createTestPorter({
+        shift_type: 'Relief',
+        shift_offset_days: 0,
+        guaranteed_hours: 37.5
+      })
+
+      // Add contracted hours
+      await testUtils.createContractedHours(reliefPorter.id, 'Monday', '08:00:00', '20:00:00')
+
+      const mondayDate = new Date('2024-01-01')
+      const result = await service.getPorterAvailability(reliefPorter.id, mondayDate)
+
+      expect(result.isWorking).toBe(true)
+      expect(result.isAvailable).toBe(true)
+      expect(result.shiftDetails.start_time).toBe('08:00:00')
+      expect(result.shiftDetails.end_time).toBe('20:00:00')
+    })
+  })
+
   describe('performance tests', () => {
     it('should calculate availability for multiple porters efficiently', async () => {
       // Create multiple test porters
       const porters = await Promise.all(
-        Array.from({ length: 10 }, (_, i) => 
+        Array.from({ length: 10 }, (_, i) =>
           testUtils.createTestPorter({ name: `Test Porter ${i}` })
         )
       )

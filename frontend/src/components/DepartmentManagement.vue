@@ -59,7 +59,7 @@
               class="action-btn action-btn--edit"
               title="Edit Department"
             >
-              
+
             </button>
             <button
               @click="deleteDepartment(department)"
@@ -90,7 +90,7 @@
 
         <div v-else-if="department.is_24_7" class="schedules-section">
           <div class="schedule-24-7">
-            
+
             <span class="schedule-text">24/7 Operations</span>
             <span class="schedule-porters">{{ department.default_porters_required }} porters</span>
           </div>
@@ -176,6 +176,7 @@ const refreshDepartments = async () => {
   isLoading.value = true
   try {
     const data = await api.getDepartments()
+    console.log('DepartmentManagement - Fetched departments:', data)
     departments.value = data
   } catch (error) {
     console.error('Failed to load departments:', error)
@@ -191,7 +192,17 @@ const openCreateModal = () => {
 }
 
 const editDepartment = (department: Department) => {
-  selectedDepartment.value = { ...department }
+  console.log('DepartmentManagement - Editing department:', department)
+  console.log('DepartmentManagement - Department schedules:', department.schedules)
+
+  selectedDepartment.value = {
+    ...department,
+    schedules: department.schedules ? [...department.schedules] : []
+  }
+
+  console.log('DepartmentManagement - Selected department:', selectedDepartment.value)
+  console.log('DepartmentManagement - Selected department schedules:', selectedDepartment.value.schedules)
+
   isEditing.value = true
   showModal.value = true
 }

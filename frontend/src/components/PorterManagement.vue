@@ -2,7 +2,7 @@
   <div class="porter-management">
     <div class="management-header">
       <h2 class="section-title">
-        
+
         Porter Management
       </h2>
 
@@ -115,7 +115,7 @@
               class="action-btn action-btn--edit"
               title="Edit Porter"
             >
-              
+
             </button>
             <button
               @click="deletePorter(porter)"
@@ -153,7 +153,7 @@
             <h4 class="schedule-title">Current Schedule</h4>
             <div class="schedule-info">
               <div class="schedule-pattern">
-                
+
                 <span class="pattern-text">{{ getSchedulePattern(porter) }}</span>
               </div>
               <div class="next-shift">
@@ -399,7 +399,9 @@ const handleDeleteConfirm = async () => {
 
 // Utility methods
 const getInitials = (firstName: string, lastName: string) => {
-  return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
+  const first = firstName?.charAt(0) || ''
+  const last = lastName?.charAt(0) || ''
+  return `${first}${last}`.toUpperCase()
 }
 
 const porterCardClass = (porter: Porter) => {

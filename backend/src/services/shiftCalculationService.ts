@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { database } from '@/utils/database';
+import { initializeDatabase } from '@/utils/database';
 import { daysBetween } from '@/utils/dateHelpers';
 import { Porter, Shift, PorterAvailability } from '@/types';
 
@@ -16,6 +15,11 @@ export class ShiftCalculationService {
    */
   async isPorterWorkingOnDate(porter: Porter, targetDate: string): Promise<boolean> {
     try {
+      // Handle relief porters - they work based on contracted hours or assignments
+      if (porter.shift_type === 'Relief') {
+        return await this.isReliefPorterWorkingOnDate(porter, targetDate);
+      }
+
       // Get the shift pattern for this porter's shift type
       const shift = await this.getShiftByType(porter.shift_type);
       if (!shift) {
@@ -48,29 +52,97 @@ export class ShiftCalculationService {
   }
 
   /**
-   * Get shift pattern by shift type (e.g., "Day A", "Night B")
+   * Check if a relief porter is working on a specific date
+   * Relief porters work based on contracted hours and relief assignments
+   * @param porter - The relief porter to check
+   * @param targetDate - The date to check (YYYY-MM-DD format)
+   * @returns Promise<boolean> - True if the relief porter is working on that date
+   */
+  async isReliefPorterWorkingOnDate(porter: Porter, targetDate: string): Promise<boolean> {
+    try {
+      const database = await initializeDatabase();
+
+      // Check for relief assignments on this date
+      const reliefAssignmentQuery = `
+        SELECT id FROM relief_assignments
+        WHERE porter_id = ?
+        AND start_date <= ?
+        AND end_date >= ?
+      `;
+
+      const reliefAssignments = await database.query(reliefAssignmentQuery, [porter.id, targetDate, targetDate]);
+      if (reliefAssignments.length > 0) {
+        return true;
+      }
+
+      // Check for temporary assignments on this date
+      const tempAssignmentQuery = `
+        SELECT id FROM temporary_assignments
+        WHERE porter_id = ?
+        AND assignment_date = ?
+      `;
+
+      const tempAssignments = await database.query(tempAssignmentQuery, [porter.id, targetDate]);
+      if (tempAssignments.length > 0) {
+        return true;
+      }
+
+      // Check contracted hours for the day of week
+      const dayOfWeek = new Date(targetDate).toLocaleDateString('en-US', { weekday: 'long' });
+      const contractedHoursQuery = `
+        SELECT id FROM porter_contracted_hours
+        WHERE porter_id = ?
+        AND day_of_week = ?
+      `;
+
+      const contractedHours = await database.query(contractedHoursQuery, [porter.id, dayOfWeek]);
+      return contractedHours.length > 0;
+    } catch (error) {
+      console.error('Error checking relief porter availability:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get shift pattern by shift type (e.g., "Day A", "Night B", "Relief R")
    * @param shiftType - The shift type string
    * @returns Promise<Shift | null> - The matching shift pattern or null
    */
   async getShiftByType(shiftType: string): Promise<Shift | null> {
     try {
+      // Handle single word shift types like "Relief"
+      if (shiftType.trim() === 'Relief') {
+        const query = `
+          SELECT
+            id, name, start_time, end_time, shift_type, shift_ident,
+            days_on, days_off, offset_days, ground_zero, created_at, updated_at
+          FROM shifts
+          WHERE shift_type = 'Relief' AND shift_ident = 'R'
+        `;
+
+        const database = await initializeDatabase();
+        const shifts = await database.query<Shift>(query);
+        return shifts.length > 0 ? shifts[0] : null;
+      }
+
       // Parse shift type (e.g., "Day A" -> type="Day", ident="A")
       const parts = shiftType.trim().split(' ');
       if (parts.length !== 2) {
-        console.warn(`Invalid shift type format: ${shiftType}. Expected format: "Day A" or "Night B"`);
+        console.warn(`Invalid shift type format: ${shiftType}. Expected format: "Day A", "Night B", or "Relief"`);
         return null;
       }
 
       const [type, ident] = parts;
-      
+
       const query = `
-        SELECT 
+        SELECT
           id, name, start_time, end_time, shift_type, shift_ident,
           days_on, days_off, offset_days, ground_zero, created_at, updated_at
-        FROM shifts 
+        FROM shifts
         WHERE shift_type = ? AND shift_ident = ?
       `;
 
+      const database = await initializeDatabase();
       const shifts = await database.query<Shift>(query, [type, ident]);
       return shifts.length > 0 ? shifts[0] : null;
     } catch (error) {
@@ -88,7 +160,7 @@ export class ShiftCalculationService {
     try {
       // Get all porters
       const query = `
-        SELECT 
+        SELECT
           p.id, p.name, p.shift_type, p.shift_offset_days, p.regular_department_id,
           p.is_floor_staff, p.porter_type, p.guaranteed_hours, p.created_at, p.updated_at,
           d.name as department_name
@@ -97,6 +169,7 @@ export class ShiftCalculationService {
         ORDER BY p.name
       `;
 
+      const database = await initializeDatabase();
       const allPorters = await database.query<Porter>(query);
       const workingPorters: Porter[] = [];
 
@@ -135,6 +208,7 @@ export class ShiftCalculationService {
         AND end_date >= ?
       `;
 
+      const database = await initializeDatabase();
       const absences = await database.query(absenceQuery, [porter.id, targetDate, targetDate]);
       const hasAbsence = absences.length > 0;
 
@@ -187,6 +261,7 @@ export class ShiftCalculationService {
         ORDER BY p.name
       `;
 
+      const database = await initializeDatabase();
       const allPorters = await database.query<Porter>(query);
       const availabilities: PorterAvailability[] = [];
 

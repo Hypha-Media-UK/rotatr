@@ -45,9 +45,6 @@ app.get('/health', (req, res) => {
 })
 
 // API routes
-app.use('/api/porters', portersRouter)
-app.use('/api/departments', departmentsRouter)
-app.use('/api/assignments', assignmentsRouter)
 app.use('/api', indexRouter)
 
 // Error handling middleware
