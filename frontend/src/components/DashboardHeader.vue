@@ -3,7 +3,6 @@
     <div class="header-content">
       <div class="header-left">
         <h1 class="dashboard-title">
-          <span class="title-icon">🏥</span>
           Porter Shift Management
         </h1>
         <div class="current-date">
@@ -50,7 +49,7 @@
             to="/configure"
             class="btn btn--secondary btn--small"
           >
-            ⚙️ Configure
+            Configure
           </RouterLink>
 
           <button
@@ -59,8 +58,8 @@
             :disabled="isLoading"
             :class="{ 'loading': isLoading }"
           >
-            <span v-if="!isLoading">🔄 Refresh</span>
-            <span v-else>⏳ Loading...</span>
+            <span v-if="!isLoading">Refresh</span>
+            <span v-else>Loading...</span>
           </button>
 
           <button
@@ -68,7 +67,7 @@
             class="btn btn--primary btn--small"
             :disabled="isLoading"
           >
-            🚨 Generate Alerts
+            Generate Alerts
           </button>
         </div>
 
@@ -264,17 +263,17 @@ onMounted(() => {
 }
 
 .status-indicator--online {
-  background: hsl(120, 60%, 90%);
+  background: hsl(0, 0%, 45%);
   color: var(--color-success);
 }
 
 .status-indicator--warning {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 55%);
+  color: hsl(0, 0%, 55%);
 }
 
 .status-indicator--offline {
-  background: hsl(0, 70%, 90%);
+  background: hsl(0, 0%, 30%);
   color: var(--color-danger);
 }
 

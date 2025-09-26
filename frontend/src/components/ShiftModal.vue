@@ -3,7 +3,7 @@
     <div class="modal" @click.stop>
       <div class="modal-header">
         <h2 class="modal-title">
-          <span class="title-icon">{{ isEditing ? '✏️' : '➕' }}</span>
+          
           {{ isEditing ? 'Edit Shift' : 'Create Shift' }}
         </h2>
         <button @click="$emit('cancel')" class="close-btn">✕</button>
@@ -12,7 +12,7 @@
       <form @submit.prevent="handleSubmit" class="modal-content">
         <div class="form-section">
           <h3 class="section-title">Basic Information</h3>
-          
+
           <div class="form-group">
             <label for="name" class="form-label">Shift Name *</label>
             <input
@@ -95,7 +95,7 @@
         <div class="form-section">
           <h3 class="section-title">Shift Pattern</h3>
           <p class="section-description">Configure the working cycle for this shift</p>
-          
+
           <div class="form-row">
             <div class="form-group">
               <label for="daysOn" class="form-label">Days On *</label>
@@ -184,17 +184,17 @@
                 <span class="preview-value">{{ formData.days_on }} on / {{ formData.days_off }} off</span>
               </div>
             </div>
-            
+
             <div class="preview-calendar">
               <h4 class="calendar-title">Next 14 Days Preview</h4>
               <div class="calendar-grid">
-                <div 
-                  v-for="day in previewDays" 
+                <div
+                  v-for="day in previewDays"
                   :key="day.date"
                   class="calendar-day"
-                  :class="{ 
+                  :class="{
                     'calendar-day--working': day.working,
-                    'calendar-day--today': day.isToday 
+                    'calendar-day--today': day.isToday
                   }"
                 >
                   <span class="day-name">{{ day.name }}</span>
@@ -210,7 +210,7 @@
           <h3 class="section-title">Impact Analysis</h3>
           <div class="impact-analysis">
             <div class="impact-item">
-              <span class="impact-icon">👥</span>
+              
               <div class="impact-content">
                 <span class="impact-title">Porter Assignments</span>
                 <span class="impact-description">
@@ -218,9 +218,8 @@
                 </span>
               </div>
             </div>
-            
+
             <div class="impact-item">
-              <span class="impact-icon">🏥</span>
               <div class="impact-content">
                 <span class="impact-title">Department Coverage</span>
                 <span class="impact-description">
@@ -228,9 +227,9 @@
                 </span>
               </div>
             </div>
-            
+
             <div class="impact-item">
-              <span class="impact-icon">⚠️</span>
+              
               <div class="impact-content">
                 <span class="impact-title">Scheduling Impact</span>
                 <span class="impact-description">
@@ -312,7 +311,7 @@ const isFormValid = computed(() => {
   if (!formData.value.shift_ident) return false
   if (formData.value.days_on < 1) return false
   if (formData.value.days_off < 0) return false
-  
+
   return true
 })
 
@@ -320,21 +319,21 @@ const previewDays = computed(() => {
   if (!formData.value.ground_zero || !formData.value.days_on || !formData.value.days_off) {
     return []
   }
-  
+
   const days = []
   const today = new Date()
   const groundZero = new Date(formData.value.ground_zero)
-  
+
   for (let i = 0; i < 14; i++) {
     const date = new Date(today)
     date.setDate(today.getDate() + i)
-    
+
     // Calculate if this shift is working on this date
     const daysSinceGroundZero = Math.floor((date.getTime() - groundZero.getTime()) / (1000 * 60 * 60 * 24))
     const adjustedDays = daysSinceGroundZero - formData.value.offset_days
     const cycleLength = formData.value.days_on + formData.value.days_off
     const cyclePosition = adjustedDays % cycleLength
-    
+
     let working = false
     if (cyclePosition < 0) {
       const normalizedPosition = cyclePosition + cycleLength
@@ -342,7 +341,7 @@ const previewDays = computed(() => {
     } else {
       working = cyclePosition >= 0 && cyclePosition < formData.value.days_on
     }
-    
+
     days.push({
       date: date.getDate(),
       name: date.toLocaleDateString('en-US', { weekday: 'short' }),
@@ -350,50 +349,50 @@ const previewDays = computed(() => {
       isToday: i === 0
     })
   }
-  
+
   return days
 })
 
 // Methods
 const validateForm = () => {
   errors.value = {}
-  
+
   if (!formData.value.name.trim()) {
     errors.value.name = 'Shift name is required'
   }
-  
+
   if (!formData.value.start_time) {
     errors.value.start_time = 'Start time is required'
   }
-  
+
   if (!formData.value.end_time) {
     errors.value.end_time = 'End time is required'
   }
-  
+
   if (!formData.value.shift_type) {
     errors.value.shift_type = 'Shift type is required'
   }
-  
+
   if (!formData.value.shift_ident) {
     errors.value.shift_ident = 'Shift identifier is required'
   }
-  
+
   if (formData.value.days_on < 1) {
     errors.value.days_on = 'Days on must be at least 1'
   }
-  
+
   if (formData.value.days_off < 0) {
     errors.value.days_off = 'Days off cannot be negative'
   }
-  
+
   return Object.keys(errors.value).length === 0
 }
 
 const handleSubmit = () => {
   if (!validateForm()) return
-  
+
   const shiftData = { ...formData.value }
-  
+
   emit('save', shiftData)
 }
 
@@ -412,22 +411,22 @@ const getShiftDuration = () => {
   if (!formData.value.start_time || !formData.value.end_time) {
     return 'Not specified'
   }
-  
+
   const start = formData.value.start_time
   const end = formData.value.end_time
-  
+
   // Calculate duration
   const startMinutes = timeToMinutes(start)
   const endMinutes = timeToMinutes(end)
-  
+
   let duration = endMinutes - startMinutes
   if (duration < 0) {
     duration += 24 * 60 // Handle overnight shifts
   }
-  
+
   const hours = Math.floor(duration / 60)
   const minutes = duration % 60
-  
+
   return `${hours}h ${minutes > 0 ? minutes + 'm' : ''} (${start} - ${end})`
 }
 
@@ -450,7 +449,7 @@ watch(() => [formData.value.shift_type, formData.value.shift_ident], ([type, ide
     if (!formData.value.name || formData.value.name === getFullShiftName()) {
       formData.value.name = `${type} Shift ${ident}`
     }
-    
+
     // Set default times based on shift type
     if (type === 'Day' && !formData.value.start_time) {
       formData.value.start_time = '08:00'
@@ -679,7 +678,7 @@ onMounted(() => {
 }
 
 .calendar-day--working {
-  background: hsl(120, 60%, 95%);
+  background: hsl(0, 0%, 45%);
   border-color: var(--color-success);
   color: var(--color-success);
 }
@@ -758,19 +757,19 @@ onMounted(() => {
     margin: var(--space-4);
     max-height: calc(100vh - 2 * var(--space-4));
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
   .preview-info {
     grid-template-columns: 1fr;
   }
-  
+
   .calendar-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-  
+
   .modal-footer {
     flex-direction: column;
   }

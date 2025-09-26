@@ -3,7 +3,6 @@
     <main class="configure-main">
       <div class="configure-header">
         <h1 class="configure-title">
-          <span class="title-icon">⚙️</span>
           System Configuration
         </h1>
         <p class="configure-description">
@@ -74,25 +73,25 @@ const tabs = ref([
   {
     id: 'departments',
     label: 'Departments',
-    icon: '🏥',
+    icon: '',
     count: 6
   },
   {
     id: 'porters',
     label: 'Porters',
-    icon: '👥',
+    icon: '',
     count: 19
   },
   {
     id: 'shifts',
     label: 'Shifts',
-    icon: '🕐',
+    icon: '',
     count: 4
   },
   {
     id: 'settings',
     label: 'Settings',
-    icon: '⚙️',
+    icon: '',
     count: null
   }
 ])

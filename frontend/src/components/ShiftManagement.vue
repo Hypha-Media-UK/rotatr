@@ -2,7 +2,7 @@
   <div class="shift-management">
     <div class="management-header">
       <h2 class="section-title">
-        <span class="title-icon">🕐</span>
+        
         Shift Management
       </h2>
 
@@ -13,7 +13,7 @@
             class="view-btn"
             :class="{ 'view-btn--active': viewMode === 'grid' }"
           >
-            📊 Grid View
+            Grid View
           </button>
           <button
             @click="viewMode = 'timeline'"
@@ -29,15 +29,15 @@
           class="btn btn--secondary"
           :disabled="isLoading"
         >
-          <span v-if="!isLoading">🔄 Refresh</span>
-          <span v-else>⏳ Loading...</span>
+          <span v-if="!isLoading">Refresh</span>
+          <span v-else>Loading...</span>
         </button>
 
         <button
           @click="openCreateModal"
           class="btn btn--primary"
         >
-          <span>➕ Add Shift</span>
+          <span>Add Shift</span>
         </button>
       </div>
     </div>
@@ -65,7 +65,7 @@
       <div class="ground-zero-info">
         <div class="ground-zero-card">
           <h3 class="ground-zero-title">
-            <span class="ground-zero-icon">🎯</span>
+            
             Ground Zero System
           </h3>
           <div class="ground-zero-details">
@@ -92,11 +92,11 @@
     </div>
 
     <div v-else-if="shifts.length === 0" class="empty-state">
-      <div class="empty-icon">🕐</div>
+      <div class="empty-icon"></div>
       <h3>No Shifts Configured</h3>
       <p>Create your first shift pattern to get started</p>
       <button @click="openCreateModal" class="btn btn--primary">
-        ➕ Create Shift
+        Create Shift
       </button>
     </div>
 
@@ -133,7 +133,7 @@
                 class="action-btn action-btn--edit"
                 title="Edit Shift"
               >
-                ✏️
+                
               </button>
               <button
                 @click="deleteShift(shift)"
@@ -770,11 +770,11 @@ onMounted(() => {
 }
 
 .shift-card--day {
-  border-left-color: hsl(45, 100%, 50%);
+  border-left-color: hsl(0, 0%, 50%);
 }
 
 .shift-card--night {
-  border-left-color: hsl(240, 100%, 50%);
+  border-left-color: hsl(0, 0%, 40%);
 }
 
 .card-header {
@@ -808,13 +808,13 @@ onMounted(() => {
 }
 
 .shift-badge--day {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 90%);
+  color: hsl(0, 0%, 30%);
 }
 
 .shift-badge--night {
-  background: hsl(240, 100%, 90%);
-  color: hsl(240, 100%, 30%);
+  background: hsl(0, 0%, 85%);
+  color: hsl(0, 0%, 25%);
 }
 
 .shift-hours {
@@ -841,30 +841,30 @@ onMounted(() => {
 }
 
 .action-btn--view {
-  background: hsl(200, 100%, 95%);
-  color: hsl(200, 100%, 40%);
+  background: hsl(0, 0%, 95%);
+  color: hsl(0, 0%, 40%);
 }
 
 .action-btn--view:hover {
-  background: hsl(200, 100%, 90%);
+  background: hsl(0, 0%, 90%);
 }
 
 .action-btn--edit {
-  background: hsl(210, 100%, 95%);
+  background: hsl(0, 0%, 93%);
   color: var(--color-primary);
 }
 
 .action-btn--edit:hover {
-  background: hsl(210, 100%, 90%);
+  background: hsl(0, 0%, 88%);
 }
 
 .action-btn--delete {
-  background: hsl(0, 70%, 95%);
+  background: hsl(0, 0%, 91%);
   color: var(--color-danger);
 }
 
 .action-btn--delete:hover {
-  background: hsl(0, 70%, 90%);
+  background: hsl(0, 0%, 86%);
 }
 
 .card-content {
@@ -973,7 +973,7 @@ onMounted(() => {
 }
 
 .preview-day--active {
-  background: hsl(120, 60%, 95%);
+  background: hsl(0, 0%, 95%);
   color: var(--color-success);
 }
 
@@ -1062,11 +1062,11 @@ onMounted(() => {
 }
 
 .legend-dot--day {
-  background: hsl(45, 100%, 50%);
+  background: hsl(0, 0%, 50%);
 }
 
 .legend-dot--night {
-  background: hsl(240, 100%, 50%);
+  background: hsl(0, 0%, 40%);
 }
 
 .timeline-grid {
@@ -1167,11 +1167,11 @@ onMounted(() => {
 }
 
 .timeline-cell--day.timeline-cell--active {
-  background: hsl(45, 100%, 50%);
+  background: hsl(0, 0%, 50%);
 }
 
 .timeline-cell--night.timeline-cell--active {
-  background: hsl(240, 100%, 50%);
+  background: hsl(0, 0%, 40%);
 }
 
 .cell-indicator {

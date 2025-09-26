@@ -3,7 +3,7 @@
     <div class="modal" @click.stop>
       <div class="modal-header">
         <h2 class="modal-title">
-          <span class="title-icon">{{ isEditing ? '✏️' : '➕' }}</span>
+          
           {{ isEditing ? 'Edit Department' : 'Add Department' }}
         </h2>
         <button @click="$emit('cancel')" class="close-btn">✕</button>
@@ -12,7 +12,7 @@
       <form @submit.prevent="handleSubmit" class="modal-content">
         <div class="form-section">
           <h3 class="section-title">Basic Information</h3>
-          
+
           <div class="form-group">
             <label for="name" class="form-label">Department Name *</label>
             <input
@@ -58,15 +58,15 @@
         <div v-if="!formData.is_24_7" class="form-section">
           <h3 class="section-title">Operating Schedule</h3>
           <p class="section-description">Define when this department operates during the week</p>
-          
+
           <div class="schedules-container">
-            <div 
-              v-for="(schedule, index) in formData.schedules" 
+            <div
+              v-for="(schedule, index) in formData.schedules"
               :key="index"
               class="schedule-row"
             >
               <div class="schedule-day">
-                <select 
+                <select
                   v-model="schedule.day_of_week"
                   class="form-select"
                   required
@@ -75,7 +75,7 @@
                   <option v-for="day in daysOfWeek" :key="day" :value="day">{{ day }}</option>
                 </select>
               </div>
-              
+
               <div class="schedule-time">
                 <input
                   v-model="schedule.opens_at"
@@ -91,7 +91,7 @@
                   required
                 />
               </div>
-              
+
               <div class="schedule-porters">
                 <input
                   v-model.number="schedule.porters_required"
@@ -103,8 +103,8 @@
                   required
                 />
               </div>
-              
-              <button 
+
+              <button
                 type="button"
                 @click="removeSchedule(index)"
                 class="remove-btn"
@@ -113,14 +113,14 @@
                 🗑️
               </button>
             </div>
-            
-            <button 
+
+            <button
               type="button"
               @click="addSchedule"
               class="add-schedule-btn"
               :disabled="formData.schedules.length >= 7"
             >
-              ➕ Add Day
+              Add Day
             </button>
           </div>
         </div>
@@ -199,44 +199,44 @@ const daysOfWeek = [
 const isFormValid = computed(() => {
   if (!formData.value.name.trim()) return false
   if (formData.value.default_porters_required < 1) return false
-  
+
   if (!formData.value.is_24_7) {
-    return formData.value.schedules?.every(schedule => 
-      schedule.day_of_week && 
-      schedule.opens_at && 
-      schedule.closes_at && 
+    return formData.value.schedules?.every(schedule =>
+      schedule.day_of_week &&
+      schedule.opens_at &&
+      schedule.closes_at &&
       schedule.porters_required >= 1
     ) ?? false
   }
-  
+
   return true
 })
 
 // Methods
 const validateForm = () => {
   errors.value = {}
-  
+
   if (!formData.value.name.trim()) {
     errors.value.name = 'Department name is required'
   }
-  
+
   if (formData.value.default_porters_required < 1) {
     errors.value.default_porters_required = 'At least 1 porter is required'
   }
-  
+
   return Object.keys(errors.value).length === 0
 }
 
 const handleSubmit = () => {
   if (!validateForm()) return
-  
+
   const departmentData = { ...formData.value }
-  
+
   // Remove schedules if 24/7
   if (departmentData.is_24_7) {
     departmentData.schedules = []
   }
-  
+
   emit('save', departmentData)
 }
 
@@ -297,7 +297,7 @@ onMounted(() => {
       ...props.department,
       schedules: props.department.schedules ? [...props.department.schedules] : []
     }
-    
+
     // Ensure at least one schedule for non-24/7 departments
     if (!formData.value.is_24_7 && (!formData.value.schedules || formData.value.schedules.length === 0)) {
       formData.value.schedules = [
@@ -500,7 +500,7 @@ onMounted(() => {
   height: 32px;
   border: none;
   border-radius: var(--radius-md);
-  background: hsl(0, 70%, 95%);
+  background: hsl(0, 0%, 95%);
   color: var(--color-danger);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -510,7 +510,7 @@ onMounted(() => {
 }
 
 .remove-btn:hover:not(:disabled) {
-  background: hsl(0, 70%, 90%);
+  background: hsl(0, 0%, 90%);
 }
 
 .remove-btn:disabled {
@@ -556,16 +556,16 @@ onMounted(() => {
     margin: var(--space-4);
     max-height: calc(100vh - 2 * var(--space-4));
   }
-  
+
   .schedule-row {
     grid-template-columns: 1fr;
     gap: var(--space-2);
   }
-  
+
   .schedule-time {
     justify-content: center;
   }
-  
+
   .modal-footer {
     flex-direction: column;
   }

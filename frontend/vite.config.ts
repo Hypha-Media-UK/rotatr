@@ -3,7 +3,7 @@ import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { visualizer } from 'rollup-plugin-visualizer'
-import { compression } from 'vite-plugin-compression'
+import compression from 'vite-plugin-compression'
 
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -65,23 +65,12 @@ export default defineConfig(({ command, mode }) => {
       sourcemap: mode === 'development',
       minify: 'terser',
 
-      terserOptions: {
-        compress: {
-          drop_console: mode === 'production',
-          drop_debugger: mode === 'production',
-          pure_funcs: mode === 'production' ? ['console.log', 'console.info'] : []
-        },
-        mangle: {
-          safari10: true
-        }
-      },
-
       rollupOptions: {
         output: {
           manualChunks: {
             // Vendor chunks
             'vue-vendor': ['vue', 'vue-router'],
-            'ui-vendor': ['@headlessui/vue', '@heroicons/vue'],
+            'ui-vendor': ['@headlessui/vue'],
             'utils': ['date-fns']
           },
 
@@ -118,8 +107,6 @@ export default defineConfig(({ command, mode }) => {
         'vue',
         'vue-router',
         '@headlessui/vue',
-        '@heroicons/vue/24/outline',
-        '@heroicons/vue/24/solid',
         'date-fns'
       ]
     },

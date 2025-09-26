@@ -10,13 +10,13 @@
 
       <div class="modal-content">
         <p class="modal-message">{{ message }}</p>
-        
+
         <div v-if="details" class="modal-details">
           <div class="details-toggle" @click="showDetails = !showDetails">
             <span>{{ showDetails ? 'Hide' : 'Show' }} Details</span>
-            <span class="toggle-arrow" :class="{ 'toggle-arrow--open': showDetails }">▼</span>
+
           </div>
-          
+
           <div v-if="showDetails" class="details-content">
             <pre>{{ details }}</pre>
           </div>
@@ -24,16 +24,16 @@
       </div>
 
       <div class="modal-footer">
-        <button 
-          @click="$emit('cancel')" 
+        <button
+          @click="$emit('cancel')"
           class="btn btn--secondary"
           :disabled="isLoading"
         >
           {{ cancelText }}
         </button>
-        
-        <button 
-          @click="handleConfirm" 
+
+        <button
+          @click="handleConfirm"
           class="btn"
           :class="confirmButtonClass"
           :disabled="isLoading"
@@ -88,12 +88,12 @@ const showDetails = ref(false)
 // Computed properties
 const icon = computed(() => {
   if (props.icon) return props.icon
-  
+
   switch (props.confirmVariant) {
-    case 'danger': return '⚠️'
-    case 'warning': return '⚠️'
-    case 'success': return '✅'
-    default: return '❓'
+    case 'danger': return ''
+    case 'warning': return ''
+    case 'success': return ''
+    default: return ''
   }
 })
 
@@ -108,7 +108,7 @@ const confirmButtonClass = computed(() => {
 // Methods
 const handleConfirm = async () => {
   isLoading.value = true
-  
+
   try {
     // Add a small delay to show loading state
     await new Promise(resolve => setTimeout(resolve, 300))
@@ -198,15 +198,15 @@ onUnmounted(() => {
 }
 
 .modal-icon--danger {
-  background: hsl(0, 70%, 95%);
+  background: hsl(0, 0%, 95%);
 }
 
 .modal-icon--warning {
-  background: hsl(45, 100%, 95%);
+  background: hsl(0, 0%, 90%);
 }
 
 .modal-icon--success {
-  background: hsl(120, 60%, 95%);
+  background: hsl(0, 0%, 85%);
 }
 
 .modal-title {
@@ -322,7 +322,7 @@ onUnmounted(() => {
 }
 
 .btn--danger:hover:not(:disabled) {
-  background: hsl(0, 70%, 50%);
+  background: hsl(0, 0%, 20%);
 }
 
 .btn--warning {
@@ -331,7 +331,7 @@ onUnmounted(() => {
 }
 
 .btn--warning:hover:not(:disabled) {
-  background: hsl(45, 100%, 50%);
+  background: hsl(0, 0%, 50%);
 }
 
 .btn--success {
@@ -340,7 +340,7 @@ onUnmounted(() => {
 }
 
 .btn--success:hover:not(:disabled) {
-  background: hsl(120, 60%, 40%);
+  background: hsl(0, 0%, 35%);
 }
 
 .btn:disabled {
@@ -354,22 +354,22 @@ onUnmounted(() => {
     margin: var(--space-4);
     max-width: calc(100vw - 2 * var(--space-4));
   }
-  
+
   .modal-header,
   .modal-content,
   .modal-footer {
     padding: var(--space-4);
   }
-  
+
   .modal-footer {
     flex-direction: column;
   }
-  
+
   .modal-icon {
     font-size: var(--font-size-3xl);
     padding: var(--space-3);
   }
-  
+
   .modal-title {
     font-size: var(--font-size-lg);
   }

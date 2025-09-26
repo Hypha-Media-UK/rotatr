@@ -2,7 +2,6 @@
   <div class="temporary-assignments">
     <div class="assignments-header">
       <h2 class="section-title">
-        <span class="title-icon">🔄</span>
         Temporary Assignments
       </h2>
 
@@ -23,20 +22,20 @@
             class="shift-btn"
             :class="{ 'shift-btn--active': activeShift === 'Day' }"
           >
-            ☀️ Day
+            Day
           </button>
           <button
             @click="activeShift = 'Night'"
             class="shift-btn"
             :class="{ 'shift-btn--active': activeShift === 'Night' }"
           >
-            🌙 Night
+            Night
           </button>
         </div>
 
         <button @click="refreshData" class="btn btn--secondary" :disabled="isLoading">
-          <span v-if="!isLoading">🔄 Refresh</span>
-          <span v-else>⏳ Loading...</span>
+          <span v-if="!isLoading">Refresh</span>
+          <span v-else>Loading...</span>
         </button>
       </div>
     </div>
@@ -51,7 +50,7 @@
       <div class="floor-staff-panel">
         <div class="panel-header">
           <h3 class="panel-title">
-            <span class="panel-icon">👥</span>
+
             Available Floor Staff
             <span class="staff-count">({{ availableFloorStaff.length }})</span>
           </h3>
@@ -96,12 +95,12 @@
               </div>
 
               <div v-if="staff.conflictReason" class="conflict-reason">
-                <span class="conflict-icon">⚠️</span>
+
                 {{ staff.conflictReason }}
               </div>
 
               <div class="working-hours">
-                <span class="hours-icon">🕐</span>
+
                 {{ formatWorkingHours(staff.workingHours) }}
               </div>
             </div>
@@ -113,7 +112,7 @@
                 class="btn btn--small btn--primary"
                 title="Quick Assign"
               >
-                ➕
+                Assign
               </button>
 
               <button
@@ -127,7 +126,6 @@
           </div>
 
           <div v-if="filteredFloorStaff.length === 0" class="no-staff">
-            <div class="no-staff-icon">👤</div>
             <h4>No Floor Staff Available</h4>
             <p>{{ getNoStaffMessage() }}</p>
           </div>
@@ -138,7 +136,6 @@
       <div class="departments-panel">
         <div class="panel-header">
           <h3 class="panel-title">
-            <span class="panel-icon">🏥</span>
             Department Assignments
             <span class="dept-count">({{ departments.length }})</span>
           </h3>
@@ -174,7 +171,7 @@
               </div>
 
               <div class="staffing-status" :class="staffingStatusClass(department)">
-                <span class="status-icon">{{ staffingStatusIcon(department) }}</span>
+
                 {{ staffingStatusText(department) }}
               </div>
             </div>
@@ -197,7 +194,7 @@
 
               <div class="drop-zone" :class="{ 'drop-zone--active': isDragOver }">
                 <div class="drop-zone-content">
-                  <span class="drop-icon">📥</span>
+
                   <span class="drop-text">Drop porter here to assign</span>
                 </div>
               </div>
@@ -537,9 +534,9 @@ const availabilityClass = (staff: PorterAvailability) => {
 }
 
 const availabilityIcon = (staff: PorterAvailability) => {
-  if (staff.isAvailable) return '✅'
-  if (staff.conflictReason) return '⚠️'
-  return '❌'
+  if (staff.isAvailable) return ''
+  if (staff.conflictReason) return ''
+  return ''
 }
 
 const availabilityText = (staff: PorterAvailability) => {
@@ -588,10 +585,10 @@ const staffingStatusClass = (department: Department) => {
 
 const staffingStatusIcon = (department: Department) => {
   switch (department.staffing_level) {
-    case 'Adequate': return '✅'
-    case 'Low': return '⚠️'
-    case 'Critical': return '🚨'
-    default: return '❓'
+    case 'Adequate': return ''
+    case 'Low': return ''
+    case 'Critical': return ''
+    default: return ''
   }
 }
 
@@ -932,8 +929,8 @@ onMounted(() => {
 }
 
 .shift-badge--day {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 55%);
+  color: hsl(0, 0%, 55%);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -941,8 +938,8 @@ onMounted(() => {
 }
 
 .shift-badge--night {
-  background: hsl(240, 100%, 90%);
-  color: hsl(240, 100%, 30%);
+  background: hsl(0, 0%, 40%);
+  color: hsl(0, 0%, 40%);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -950,8 +947,8 @@ onMounted(() => {
 }
 
 .shift-badge--relief {
-  background: hsl(120, 100%, 90%);
-  color: hsl(120, 100%, 30%);
+  background: hsl(0, 0%, 90%);
+  color: hsl(0, 0%, 30%);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -1185,7 +1182,7 @@ onMounted(() => {
 
 .drop-zone--active {
   border-color: var(--color-primary);
-  background: hsl(220, 100%, 98%);
+  background: hsl(0, 0%, 98%);
 }
 
 .drop-zone-content {
@@ -1272,7 +1269,7 @@ onMounted(() => {
 }
 
 .remove-btn:hover {
-  background: hsl(0, 100%, 45%);
+  background: hsl(0, 0%, 95%);
 }
 
 @keyframes spin {

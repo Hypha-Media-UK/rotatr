@@ -3,7 +3,7 @@
     <div class="modal" @click.stop>
       <div class="modal-header">
         <h2 class="modal-title">
-          <span class="title-icon">⚡</span>
+          
           Quick Assignment
         </h2>
         <button @click="$emit('cancel')" class="close-btn">✕</button>
@@ -38,9 +38,9 @@
               :class="{ 'form-input--error': errors.department_id }"
             >
               <option value="">Select Department</option>
-              <option 
-                v-for="dept in availableDepartments" 
-                :key="dept.id" 
+              <option
+                v-for="dept in availableDepartments"
+                :key="dept.id"
                 :value="dept.id"
                 :disabled="isDepartmentFull(dept)"
               >
@@ -119,7 +119,7 @@
 
           <div v-if="assignmentConflicts.length > 0" class="conflicts-warning">
             <h4 class="warning-title">
-              <span class="warning-icon">⚠️</span>
+              
               Assignment Conflicts
             </h4>
             <ul class="conflicts-list">
@@ -156,9 +156,9 @@
           <button type="button" @click="$emit('cancel')" class="btn btn--secondary">
             Cancel
           </button>
-          <button 
-            type="submit" 
-            class="btn btn--primary" 
+          <button
+            type="submit"
+            class="btn btn--primary"
             :disabled="!isFormValid || assignmentConflicts.length > 0"
           >
             Create Assignment
@@ -243,7 +243,7 @@ const assignmentConflicts = ref<string[]>([])
 // Computed properties
 const availableDepartments = computed(() => {
   // Filter departments that need staff
-  return props.departments.filter(dept => 
+  return props.departments.filter(dept =>
     dept.staffing_level === 'Low' || dept.staffing_level === 'Critical'
   ).sort((a, b) => {
     // Prioritize critical departments
@@ -259,8 +259,8 @@ const selectedDepartment = computed(() => {
 })
 
 const isFormValid = computed(() => {
-  return formData.value.department_id && 
-         formData.value.start_time && 
+  return formData.value.department_id &&
+         formData.value.start_time &&
          formData.value.end_time &&
          formData.value.start_time < formData.value.end_time
 })
@@ -268,58 +268,58 @@ const isFormValid = computed(() => {
 // Methods
 const validateForm = () => {
   errors.value = {}
-  
+
   if (!formData.value.department_id) {
     errors.value.department_id = 'Department is required'
   }
-  
+
   if (!formData.value.start_time) {
     errors.value.start_time = 'Start time is required'
   }
-  
+
   if (!formData.value.end_time) {
     errors.value.end_time = 'End time is required'
   }
-  
-  if (formData.value.start_time && formData.value.end_time && 
+
+  if (formData.value.start_time && formData.value.end_time &&
       formData.value.start_time >= formData.value.end_time) {
     errors.value.end_time = 'End time must be after start time'
   }
-  
+
   return Object.keys(errors.value).length === 0
 }
 
 const checkConflicts = () => {
   const conflicts: string[] = []
-  
+
   if (selectedDepartment.value) {
     // Check if department is at capacity
     if (isDepartmentFull(selectedDepartment.value)) {
       conflicts.push('Department is at full capacity')
     }
-    
+
     // Check time conflicts with porter's working hours
     const assignmentStart = timeToMinutes(formData.value.start_time)
     const assignmentEnd = timeToMinutes(formData.value.end_time)
     const workingStart = timeToMinutes(props.staff.workingHours.start)
     const workingEnd = timeToMinutes(props.staff.workingHours.end)
-    
+
     if (assignmentStart < workingStart || assignmentEnd > workingEnd) {
       conflicts.push('Assignment time is outside porter\'s working hours')
     }
   }
-  
+
   assignmentConflicts.value = conflicts
 }
 
 const handleSubmit = () => {
   if (!validateForm()) return
-  
+
   const assignmentData: AssignmentData = {
     ...formData.value,
     department_id: Number(formData.value.department_id)
   }
-  
+
   emit('assign', assignmentData)
 }
 
@@ -369,14 +369,14 @@ const timeToMinutes = (timeString: string) => {
 
 const getAssignmentDuration = () => {
   if (!formData.value.start_time || !formData.value.end_time) return 'Not specified'
-  
+
   const start = timeToMinutes(formData.value.start_time)
   const end = timeToMinutes(formData.value.end_time)
   const duration = end - start
-  
+
   const hours = Math.floor(duration / 60)
   const minutes = duration % 60
-  
+
   return `${hours}h ${minutes > 0 ? minutes + 'm' : ''}`
 }
 
@@ -399,7 +399,7 @@ onMounted(() => {
     formData.value.start_time = props.staff.workingHours.start.substring(0, 5)
     formData.value.end_time = props.staff.workingHours.end.substring(0, 5)
   }
-  
+
   // Pre-select the most critical department if available
   const criticalDept = availableDepartments.value.find(d => d.staffing_level === 'Critical')
   if (criticalDept) {
@@ -518,8 +518,8 @@ onMounted(() => {
 }
 
 .shift-badge--day {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 90%);
+  color: hsl(0, 0%, 30%);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -527,8 +527,8 @@ onMounted(() => {
 }
 
 .shift-badge--night {
-  background: hsl(240, 100%, 90%);
-  color: hsl(240, 100%, 30%);
+  background: hsl(0, 0%, 85%);
+  color: hsl(0, 0%, 25%);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -636,7 +636,7 @@ onMounted(() => {
 
 .conflicts-warning {
   padding: var(--space-4);
-  background: hsl(0, 100%, 97%);
+  background: hsl(0, 0%, 97%);
   border: 1px solid var(--color-danger);
   border-radius: var(--radius-lg);
 }
@@ -712,16 +712,16 @@ onMounted(() => {
     margin: var(--space-4);
     max-height: calc(100vh - 2 * var(--space-4));
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
   .staff-info {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .modal-footer {
     flex-direction: column;
   }

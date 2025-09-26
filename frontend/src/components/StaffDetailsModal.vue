@@ -16,7 +16,7 @@
             </div>
           </div>
         </div>
-        
+
         <button @click="$emit('close')" class="close-btn">✕</button>
       </div>
 
@@ -24,21 +24,20 @@
         <div class="details-grid">
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">👤</span>
               Porter Information
             </h3>
-            
+
             <div class="detail-items">
               <div class="detail-item">
                 <span class="detail-label">Full Name</span>
                 <span class="detail-value">{{ staff.porter.name }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Porter Type</span>
                 <span class="detail-value">{{ staff.porter.porter_type }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Floor Staff</span>
                 <span class="detail-value">
@@ -47,7 +46,7 @@
                   </span>
                 </span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Regular Department</span>
                 <span class="detail-value">{{ staff.porter.department_name || 'None (Floor Staff)' }}</span>
@@ -57,10 +56,10 @@
 
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">🕐</span>
+              
               Shift Information
             </h3>
-            
+
             <div class="detail-items">
               <div class="detail-item">
                 <span class="detail-label">Shift Type</span>
@@ -70,17 +69,17 @@
                   </span>
                 </span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Working Hours</span>
                 <span class="detail-value">{{ formatWorkingHours(staff.workingHours) }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Shift Offset</span>
                 <span class="detail-value">{{ staff.porter.shift_offset_days }} days</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Working Today</span>
                 <span class="detail-value">
@@ -95,10 +94,10 @@
 
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">✅</span>
+              
               Availability Status
             </h3>
-            
+
             <div class="availability-card">
               <div class="availability-header">
                 <span class="availability-icon" :class="availabilityClass()">
@@ -106,18 +105,18 @@
                 </span>
                 <span class="availability-text">{{ availabilityText() }}</span>
               </div>
-              
+
               <div v-if="staff.conflictReason" class="conflict-details">
                 <h4 class="conflict-title">Conflict Details</h4>
                 <p class="conflict-reason">{{ staff.conflictReason }}</p>
               </div>
-              
+
               <div v-else-if="staff.isAvailable" class="available-details">
                 <p class="available-text">
                   Porter is available for temporary assignments during their working hours.
                 </p>
               </div>
-              
+
               <div v-else class="unavailable-details">
                 <p class="unavailable-text">
                   Porter is not working today and cannot be assigned.
@@ -129,17 +128,17 @@
 
         <div class="schedule-section">
           <h3 class="section-title">
-            <span class="section-icon">📅</span>
+            
             Schedule Preview - Next 14 Days
           </h3>
-          
+
           <div class="schedule-calendar">
             <div class="calendar-grid">
-              <div 
-                v-for="day in schedulePreview" 
+              <div
+                v-for="day in schedulePreview"
                 :key="day.date"
                 class="calendar-day"
-                :class="{ 
+                :class="{
                   'calendar-day--working': day.working,
                   'calendar-day--today': day.isToday,
                   'calendar-day--weekend': day.isWeekend
@@ -154,7 +153,7 @@
                 <span v-if="day.isToday" class="today-indicator">TODAY</span>
               </div>
             </div>
-            
+
             <div class="calendar-legend">
               <div class="legend-item">
                 <span class="legend-indicator legend-indicator--working"></span>
@@ -174,13 +173,13 @@
 
         <div class="assignments-section">
           <h3 class="section-title">
-            <span class="section-icon">📋</span>
+            
             Current Assignments for {{ formatDate(selectedDate) }}
           </h3>
-          
+
           <div v-if="currentAssignments.length > 0" class="assignments-list">
-            <div 
-              v-for="assignment in currentAssignments" 
+            <div
+              v-for="assignment in currentAssignments"
               :key="assignment.id"
               class="assignment-card"
             >
@@ -188,10 +187,10 @@
                 <h4 class="assignment-department">{{ assignment.department_name }}</h4>
                 <span class="assignment-type">{{ assignment.assignment_type }}</span>
               </div>
-              
+
               <div class="assignment-details">
                 <div class="assignment-time">
-                  <span class="time-icon">🕐</span>
+                  
                   {{ formatTime(assignment.start_time) }} - {{ formatTime(assignment.end_time) }}
                 </div>
                 <div class="assignment-duration">
@@ -200,7 +199,7 @@
               </div>
             </div>
           </div>
-          
+
           <div v-else class="no-assignments">
             <div class="no-assignments-icon">📝</div>
             <h4>No Current Assignments</h4>
@@ -216,17 +215,17 @@
             <span class="info-value">{{ formatDateTime(new Date()) }}</span>
           </div>
         </div>
-        
+
         <div class="footer-actions">
           <button @click="$emit('close')" class="btn btn--secondary">
             Close
           </button>
-          <button 
+          <button
             v-if="staff.isAvailable"
             @click="handleQuickAssign"
             class="btn btn--primary"
           >
-            ➕ Quick Assign
+            Quick Assign
           </button>
         </div>
       </div>
@@ -284,18 +283,18 @@ const emit = defineEmits<{
 const schedulePreview = computed(() => {
   const days = []
   const today = new Date()
-  
+
   for (let i = 0; i < 14; i++) {
     const date = new Date(today)
     date.setDate(today.getDate() + i)
-    
+
     // Mock calculation - in real app, this would use the shift calculation service
     const dayOfCycle = (i + props.staff.porter.shift_offset_days) % 8
     const working = dayOfCycle < 4 // 4 on, 4 off pattern
-    
+
     const dayOfWeek = date.getDay()
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
-    
+
     days.push({
       date: date.toISOString().split('T')[0],
       dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
@@ -306,7 +305,7 @@ const schedulePreview = computed(() => {
       isWeekend
     })
   }
-  
+
   return days
 })
 
@@ -370,7 +369,7 @@ const workingStatusClass = () => {
 }
 
 const workingStatusIcon = () => {
-  return props.staff.isWorking ? '✅' : '❌'
+  return props.staff.isWorking ? '' : ''
 }
 
 const availabilityClass = () => {
@@ -380,9 +379,9 @@ const availabilityClass = () => {
 }
 
 const availabilityIcon = () => {
-  if (props.staff.isAvailable) return '✅'
-  if (props.staff.conflictReason) return '⚠️'
-  return '❌'
+  if (props.staff.isAvailable) return ''
+  if (props.staff.conflictReason) return ''
+  return ''
 }
 
 const availabilityText = () => {
@@ -395,14 +394,14 @@ const getAssignmentDuration = (assignment: Assignment) => {
   const start = timeToMinutes(assignment.start_time)
   const end = timeToMinutes(assignment.end_time)
   let duration = end - start
-  
+
   if (duration < 0) {
     duration += 24 * 60 // Handle overnight shifts
   }
-  
+
   const hours = Math.floor(duration / 60)
   const minutes = duration % 60
-  
+
   return `${hours}h ${minutes > 0 ? minutes + 'm' : ''}`
 }
 
@@ -479,8 +478,8 @@ const timeToMinutes = (timeString: string) => {
 }
 
 .shift-badge--day {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 55%);
+  color: hsl(0, 0%, 55%);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -488,8 +487,8 @@ const timeToMinutes = (timeString: string) => {
 }
 
 .shift-badge--night {
-  background: hsl(240, 100%, 90%);
-  color: hsl(240, 100%, 30%);
+  background: hsl(0, 0%, 40%);
+  color: hsl(0, 0%, 40%);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -687,7 +686,7 @@ const timeToMinutes = (timeString: string) => {
 }
 
 .calendar-day--working {
-  background: hsl(120, 60%, 95%);
+  background: hsl(0, 0%, 45%);
   border-color: var(--color-success);
   color: var(--color-success);
 }
@@ -895,32 +894,32 @@ const timeToMinutes = (timeString: string) => {
     margin: var(--space-4);
     max-height: calc(100vh - 2 * var(--space-4));
   }
-  
+
   .staff-header {
     flex-direction: column;
     text-align: center;
     gap: var(--space-3);
   }
-  
+
   .details-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .calendar-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-  
+
   .calendar-legend {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .modal-footer {
     flex-direction: column;
     gap: var(--space-4);
     align-items: stretch;
   }
-  
+
   .footer-actions {
     flex-direction: column;
   }

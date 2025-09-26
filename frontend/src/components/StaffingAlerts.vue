@@ -2,10 +2,9 @@
   <div class="staffing-alerts">
     <div class="alerts-header">
       <h2 class="alerts-title">
-        <span class="title-icon">🚨</span>
         Staffing Alerts
       </h2>
-      
+
       <div class="alerts-summary">
         <div class="summary-stat">
           <span class="stat-value">{{ totalAlerts }}</span>
@@ -28,14 +27,14 @@
     </div>
 
     <div v-else-if="alerts.length === 0" class="no-alerts">
-      <div class="no-alerts-icon">✅</div>
+      <div class="no-alerts-icon"></div>
       <h3>No Staffing Alerts</h3>
       <p>All departments have adequate staffing for {{ selectedDate }}</p>
     </div>
 
     <div v-else class="alerts-list">
-      <div 
-        v-for="alert in sortedAlerts" 
+      <div
+        v-for="alert in sortedAlerts"
         :key="alert.id"
         class="alert-card"
         :class="alertCardClass(alert)"
@@ -47,9 +46,9 @@
               {{ formatTime(alert.start_time) }} - {{ formatTime(alert.end_time) }}
             </div>
           </div>
-          
+
           <div class="alert-badge" :class="alertBadgeClass(alert)">
-            <span class="badge-icon">{{ alertIcon(alert) }}</span>
+            
             {{ alert.alert_type }}
           </div>
         </div>
@@ -71,13 +70,13 @@
           </div>
 
           <div class="alert-actions">
-            <button 
+            <button
               @click="viewDepartmentDetails(alert)"
               class="btn btn--secondary btn--small"
             >
               View Details
             </button>
-            <button 
+            <button
               @click="resolveAlert(alert)"
               class="btn btn--primary btn--small"
             >
@@ -90,23 +89,23 @@
 
     <div v-if="alerts.length > 0" class="alerts-footer">
       <div class="bulk-actions">
-        <button 
+        <button
           @click="refreshAlerts"
           class="btn btn--secondary"
           :disabled="isLoading"
         >
-          🔄 Refresh Alerts
+          Refresh Alerts
         </button>
-        
-        <button 
+
+        <button
           @click="exportAlerts"
           class="btn btn--secondary"
           :disabled="isLoading"
         >
-          📊 Export Report
+          Export Report
         </button>
       </div>
-      
+
       <div class="last-updated">
         Last updated: {{ lastUpdated }}
       </div>
@@ -155,11 +154,11 @@ const lastUpdated = ref<string>('')
 // Computed properties
 const totalAlerts = computed(() => alerts.value.length)
 
-const criticalAlerts = computed(() => 
+const criticalAlerts = computed(() =>
   alerts.value.filter(alert => alert.alert_type === 'Critical').length
 )
 
-const lowStaffAlerts = computed(() => 
+const lowStaffAlerts = computed(() =>
   alerts.value.filter(alert => alert.alert_type === 'Low Staff').length
 )
 
@@ -248,7 +247,7 @@ const loadAlerts = async () => {
       alert_type: 'Low Staff'
     }
   ]
-  
+
   lastUpdated.value = new Date().toLocaleTimeString()
 }
 
@@ -273,7 +272,7 @@ onMounted(() => {
 }
 
 .alerts-header {
-  background: linear-gradient(135deg, var(--color-danger), hsl(0, 70%, 50%));
+  background: linear-gradient(135deg, var(--color-danger), hsl(0, 0%, 30%));
   color: white;
   padding: var(--space-6);
   display: grid;
@@ -377,12 +376,12 @@ onMounted(() => {
 
 .alert-card--critical {
   border-left: 4px solid var(--color-danger);
-  background: hsl(0, 70%, 98%);
+  background: hsl(0, 0%, 98%);
 }
 
 .alert-card--low-staff {
   border-left: 4px solid var(--color-warning);
-  background: hsl(45, 100%, 98%);
+  background: hsl(0, 0%, 96%);
 }
 
 .alert-card:hover {
@@ -421,13 +420,13 @@ onMounted(() => {
 }
 
 .alert-badge--critical {
-  background: hsl(0, 70%, 90%);
+  background: hsl(0, 0%, 90%);
   color: var(--color-danger);
 }
 
 .alert-badge--low-staff {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 85%);
+  color: hsl(0, 0%, 30%);
 }
 
 .alert-content {
@@ -503,21 +502,21 @@ onMounted(() => {
     text-align: center;
     gap: var(--space-4);
   }
-  
+
   .alerts-summary {
     justify-content: center;
   }
-  
+
   .alert-header,
   .alert-content {
     grid-template-columns: 1fr;
     gap: var(--space-3);
   }
-  
+
   .staffing-numbers {
     justify-content: space-around;
   }
-  
+
   .alerts-footer {
     grid-template-columns: 1fr;
     text-align: center;
@@ -529,15 +528,15 @@ onMounted(() => {
     flex-direction: column;
     gap: var(--space-2);
   }
-  
+
   .summary-stat {
     min-width: auto;
   }
-  
+
   .alert-actions {
     flex-direction: column;
   }
-  
+
   .bulk-actions {
     flex-direction: column;
   }

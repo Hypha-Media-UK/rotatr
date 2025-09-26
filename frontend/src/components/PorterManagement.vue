@@ -2,7 +2,7 @@
   <div class="porter-management">
     <div class="management-header">
       <h2 class="section-title">
-        <span class="title-icon">👥</span>
+        
         Porter Management
       </h2>
 
@@ -30,15 +30,15 @@
           class="btn btn--secondary"
           :disabled="isLoading"
         >
-          <span v-if="!isLoading">🔄 Refresh</span>
-          <span v-else>⏳ Loading...</span>
+          <span v-if="!isLoading">Refresh</span>
+          <span v-else>Loading...</span>
         </button>
 
         <button
           @click="openCreateModal"
           class="btn btn--primary"
         >
-          <span>➕ Add Porter</span>
+          <span>Add Porter</span>
         </button>
       </div>
     </div>
@@ -72,11 +72,11 @@
     </div>
 
     <div v-else-if="filteredPorters.length === 0" class="empty-state">
-      <div class="empty-icon">👥</div>
+      <div class="empty-icon"></div>
       <h3>{{ porters.length === 0 ? 'No Porters Found' : 'No Matching Porters' }}</h3>
       <p>{{ porters.length === 0 ? 'Get started by adding your first porter' : 'Try adjusting your filters' }}</p>
       <button v-if="porters.length === 0" @click="openCreateModal" class="btn btn--primary">
-        ➕ Add Porter
+        Add Porter
       </button>
     </div>
 
@@ -115,7 +115,7 @@
               class="action-btn action-btn--edit"
               title="Edit Porter"
             >
-              ✏️
+              
             </button>
             <button
               @click="deletePorter(porter)"
@@ -153,7 +153,7 @@
             <h4 class="schedule-title">Current Schedule</h4>
             <div class="schedule-info">
               <div class="schedule-pattern">
-                <span class="pattern-icon">🕐</span>
+                
                 <span class="pattern-text">{{ getSchedulePattern(porter) }}</span>
               </div>
               <div class="next-shift">
@@ -634,17 +634,17 @@ onMounted(() => {
 }
 
 .meta-badge--day {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 55%);
+  color: hsl(0, 0%, 55%);
 }
 
 .meta-badge--night {
-  background: hsl(240, 100%, 90%);
-  color: hsl(240, 100%, 30%);
+  background: hsl(0, 0%, 40%);
+  color: hsl(0, 0%, 40%);
 }
 
 .meta-badge--relief {
-  background: hsl(120, 60%, 90%);
+  background: hsl(0, 0%, 45%);
   color: var(--color-success);
 }
 
@@ -677,12 +677,12 @@ onMounted(() => {
 }
 
 .action-btn--view {
-  background: hsl(200, 100%, 95%);
-  color: hsl(200, 100%, 40%);
+  background: hsl(0, 0%, 50%);
+  color: hsl(0, 0%, 50%);
 }
 
 .action-btn--view:hover {
-  background: hsl(200, 100%, 90%);
+  background: hsl(0, 0%, 50%);
 }
 
 .action-btn--edit {
@@ -695,12 +695,12 @@ onMounted(() => {
 }
 
 .action-btn--delete {
-  background: hsl(0, 70%, 95%);
+  background: hsl(0, 0%, 30%);
   color: var(--color-danger);
 }
 
 .action-btn--delete:hover {
-  background: hsl(0, 70%, 90%);
+  background: hsl(0, 0%, 30%);
 }
 
 .card-content {

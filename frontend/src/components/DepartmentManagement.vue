@@ -2,7 +2,6 @@
   <div class="department-management">
     <div class="management-header">
       <h2 class="section-title">
-        <span class="title-icon">🏥</span>
         Department Management
       </h2>
 
@@ -12,15 +11,15 @@
           class="btn btn--secondary"
           :disabled="isLoading"
         >
-          <span v-if="!isLoading">🔄 Refresh</span>
-          <span v-else>⏳ Loading...</span>
+          <span v-if="!isLoading">Refresh</span>
+          <span v-else>Loading...</span>
         </button>
 
         <button
           @click="openCreateModal"
           class="btn btn--primary"
         >
-          <span>➕ Add Department</span>
+          <span>Add Department</span>
         </button>
       </div>
     </div>
@@ -31,11 +30,10 @@
     </div>
 
     <div v-else-if="departments.length === 0" class="empty-state">
-      <div class="empty-icon">🏥</div>
       <h3>No Departments Found</h3>
       <p>Get started by adding your first department</p>
       <button @click="openCreateModal" class="btn btn--primary">
-        ➕ Add Department
+        Add Department
       </button>
     </div>
 
@@ -61,7 +59,7 @@
               class="action-btn action-btn--edit"
               title="Edit Department"
             >
-              ✏️
+              
             </button>
             <button
               @click="deleteDepartment(department)"
@@ -92,7 +90,7 @@
 
         <div v-else-if="department.is_24_7" class="schedules-section">
           <div class="schedule-24-7">
-            <span class="schedule-icon">🕐</span>
+            
             <span class="schedule-text">24/7 Operations</span>
             <span class="schedule-porters">{{ department.default_porters_required }} porters</span>
           </div>
@@ -432,12 +430,12 @@ onMounted(() => {
 }
 
 .action-btn--delete {
-  background: hsl(0, 70%, 95%);
+  background: hsl(0, 0%, 30%);
   color: var(--color-danger);
 }
 
 .action-btn--delete:hover {
-  background: hsl(0, 70%, 90%);
+  background: hsl(0, 0%, 30%);
 }
 
 .schedules-section {

@@ -287,7 +287,7 @@ class ApiClient {
   }
 
   // Shift Calculation APIs (when routes are enabled)
-  async getPorterAvailability(
+  async getPorterShiftCalculation(
     porterId: number,
     date: string
   ): Promise<ApiResponse<any>> {

@@ -2,7 +2,6 @@
   <div class="quick-stats">
     <div class="stats-header">
       <h2 class="stats-title">
-        <span class="title-icon">📊</span>
         Quick Stats
       </h2>
       <div class="stats-date">{{ formattedDate }}</div>
@@ -15,7 +14,6 @@
 
     <div v-else class="stats-grid">
       <div class="stat-card stat-card--primary">
-        <div class="stat-icon">👥</div>
         <div class="stat-content">
           <div class="stat-value">{{ totalPorters }}</div>
           <div class="stat-label">Total Porters</div>
@@ -23,7 +21,6 @@
       </div>
 
       <div class="stat-card stat-card--success">
-        <div class="stat-icon">✅</div>
         <div class="stat-content">
           <div class="stat-value">{{ workingPorters }}</div>
           <div class="stat-label">Working Today</div>
@@ -31,7 +28,6 @@
       </div>
 
       <div class="stat-card stat-card--info">
-        <div class="stat-icon">🏥</div>
         <div class="stat-content">
           <div class="stat-value">{{ totalDepartments }}</div>
           <div class="stat-label">Departments</div>
@@ -39,7 +35,6 @@
       </div>
 
       <div class="stat-card stat-card--warning">
-        <div class="stat-icon">⚠️</div>
         <div class="stat-content">
           <div class="stat-value">{{ lowStaffDepartments }}</div>
           <div class="stat-label">Low Staffing</div>
@@ -47,7 +42,6 @@
       </div>
 
       <div class="stat-card stat-card--danger">
-        <div class="stat-icon">🚨</div>
         <div class="stat-content">
           <div class="stat-value">{{ criticalAlerts }}</div>
           <div class="stat-label">Critical Alerts</div>
@@ -55,7 +49,6 @@
       </div>
 
       <div class="stat-card stat-card--neutral">
-        <div class="stat-icon">📋</div>
         <div class="stat-content">
           <div class="stat-value">{{ tempAssignments }}</div>
           <div class="stat-label">Temp Assignments</div>
@@ -67,8 +60,8 @@
       <div class="coverage-indicator">
         <div class="coverage-label">Overall Coverage</div>
         <div class="coverage-bar">
-          <div 
-            class="coverage-fill" 
+          <div
+            class="coverage-fill"
             :style="{ width: `${overallCoverage}%` }"
             :class="coverageClass"
           ></div>
@@ -127,10 +120,10 @@ const coverageClass = computed(() => {
 const loadStats = async () => {
   // This would typically fetch from the API
   // For now, we'll use mock data that updates based on the selected date
-  
+
   // Simulate different stats for different dates
   const dayOfWeek = new Date(props.selectedDate).getDay()
-  
+
   // Weekend typically has fewer staff
   if (dayOfWeek === 0 || dayOfWeek === 6) {
     workingPorters.value = 10
@@ -229,27 +222,27 @@ onMounted(() => {
 }
 
 .stat-card--primary {
-  background: linear-gradient(135deg, hsl(210, 100%, 95%), hsl(210, 100%, 90%));
+  background: linear-gradient(135deg, hsl(0, 0%, 95%), hsl(0, 0%, 90%));
   border-left: 4px solid var(--color-primary);
 }
 
 .stat-card--success {
-  background: linear-gradient(135deg, hsl(120, 60%, 95%), hsl(120, 60%, 90%));
+  background: linear-gradient(135deg, hsl(0, 0%, 93%), hsl(0, 0%, 88%));
   border-left: 4px solid var(--color-success);
 }
 
 .stat-card--info {
-  background: linear-gradient(135deg, hsl(200, 100%, 95%), hsl(200, 100%, 90%));
-  border-left: 4px solid hsl(200, 100%, 50%);
+  background: linear-gradient(135deg, hsl(0, 0%, 91%), hsl(0, 0%, 86%));
+  border-left: 4px solid hsl(0, 0%, 50%);
 }
 
 .stat-card--warning {
-  background: linear-gradient(135deg, hsl(45, 100%, 95%), hsl(45, 100%, 90%));
+  background: linear-gradient(135deg, hsl(0, 0%, 89%), hsl(0, 0%, 84%));
   border-left: 4px solid var(--color-warning);
 }
 
 .stat-card--danger {
-  background: linear-gradient(135deg, hsl(0, 70%, 95%), hsl(0, 70%, 90%));
+  background: linear-gradient(135deg, hsl(0, 0%, 87%), hsl(0, 0%, 82%));
   border-left: 4px solid var(--color-danger);
 }
 
@@ -316,15 +309,15 @@ onMounted(() => {
 }
 
 .coverage-fill.coverage-good {
-  background: linear-gradient(90deg, var(--color-success), hsl(120, 60%, 40%));
+  background: linear-gradient(90deg, var(--color-success), hsl(0, 0%, 40%));
 }
 
 .coverage-fill.coverage-fair {
-  background: linear-gradient(90deg, var(--color-warning), hsl(45, 100%, 50%));
+  background: linear-gradient(90deg, var(--color-warning), hsl(0, 0%, 50%));
 }
 
 .coverage-fill.coverage-poor {
-  background: linear-gradient(90deg, var(--color-danger), hsl(0, 70%, 50%));
+  background: linear-gradient(90deg, var(--color-danger), hsl(0, 0%, 30%));
 }
 
 .coverage-percentage {
@@ -341,18 +334,18 @@ onMounted(() => {
     grid-template-columns: 1fr;
     text-align: center;
   }
-  
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-3);
   }
-  
+
   .stat-card {
     flex-direction: column;
     text-align: center;
     gap: var(--space-2);
   }
-  
+
   .coverage-indicator {
     grid-template-columns: 1fr;
     gap: var(--space-2);

@@ -3,7 +3,7 @@
     <div class="modal" @click.stop>
       <div class="modal-header">
         <h2 class="modal-title">
-          <span class="title-icon">✅</span>
+          
           Confirm Assignment
         </h2>
         <button @click="$emit('cancel')" class="close-btn">✕</button>
@@ -28,7 +28,7 @@
                   </span>
                 </div>
                 <div class="availability-status">
-                  <span class="status-indicator status-indicator--available">✅</span>
+                  <span class="status-indicator status-indicator--available"></span>
                   <span class="status-text">Available for assignment</span>
                 </div>
               </div>
@@ -45,7 +45,7 @@
                   <span v-else class="type-badge type-badge--scheduled">Scheduled</span>
                 </div>
               </div>
-              
+
               <div class="department-metrics">
                 <div class="metric">
                   <span class="metric-label">Current Staffing</span>
@@ -101,12 +101,12 @@
 
           <div v-if="conflicts.length > 0" class="conflicts-section">
             <h3 class="section-title warning">
-              <span class="warning-icon">⚠️</span>
+              
               Assignment Conflicts
             </h3>
             <div class="conflicts-list">
               <div v-for="conflict in conflicts" :key="conflict" class="conflict-item">
-                <span class="conflict-icon">⚠️</span>
+                
                 <span class="conflict-text">{{ conflict }}</span>
               </div>
             </div>
@@ -119,18 +119,18 @@
             <h3 class="section-title">Impact Analysis</h3>
             <div class="impact-grid">
               <div class="impact-item positive">
-                <span class="impact-icon">📈</span>
+                
                 <div class="impact-content">
                   <span class="impact-title">Improved Staffing</span>
                   <span class="impact-description">
-                    Department staffing will improve from {{ department.staffing_level }} to 
+                    Department staffing will improve from {{ department.staffing_level }} to
                     {{ getImprovedStaffingLevel() }}
                   </span>
                 </div>
               </div>
-              
+
               <div class="impact-item">
-                <span class="impact-icon">🕐</span>
+                
                 <div class="impact-content">
                   <span class="impact-title">Time Commitment</span>
                   <span class="impact-description">
@@ -138,9 +138,8 @@
                   </span>
                 </div>
               </div>
-              
+
               <div class="impact-item">
-                <span class="impact-icon">🔄</span>
                 <div class="impact-content">
                   <span class="impact-title">Temporary Assignment</span>
                   <span class="impact-description">
@@ -156,17 +155,17 @@
       <div class="modal-footer">
         <div class="footer-info">
           <div class="info-text">
-            <span class="info-icon">ℹ️</span>
+            
             Assignment will be created immediately and can be modified later if needed.
           </div>
         </div>
-        
+
         <div class="footer-actions">
           <button @click="$emit('cancel')" class="btn btn--secondary">
             Cancel
           </button>
-          <button 
-            @click="handleConfirm" 
+          <button
+            @click="handleConfirm"
             class="btn btn--primary"
             :class="{ 'btn--warning': conflicts.length > 0 }"
           >
@@ -248,7 +247,7 @@ const handleConfirm = () => {
     end_time: assignmentEndTime.value,
     assignment_type: 'Floor Staff'
   }
-  
+
   emit('confirm', assignmentData)
 }
 
@@ -291,14 +290,14 @@ const getAssignmentDuration = () => {
   const start = timeToMinutes(assignmentStartTime.value)
   const end = timeToMinutes(assignmentEndTime.value)
   let duration = end - start
-  
+
   if (duration < 0) {
     duration += 24 * 60 // Handle overnight shifts
   }
-  
+
   const hours = Math.floor(duration / 60)
   const minutes = duration % 60
-  
+
   return `${hours}h ${minutes > 0 ? minutes + 'm' : ''}`
 }
 
@@ -310,7 +309,7 @@ const timeToMinutes = (timeString: string) => {
 const getImprovedStaffingLevel = () => {
   const newStaffing = props.department.available_porters + 1
   const required = props.department.required_porters
-  
+
   if (newStaffing >= required) return 'Adequate'
   if (newStaffing >= required * 0.8) return 'Low'
   return 'Critical'
@@ -455,8 +454,8 @@ const getImprovedStaffingLevel = () => {
 }
 
 .shift-badge--day {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 55%);
+  color: hsl(0, 0%, 55%);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -464,8 +463,8 @@ const getImprovedStaffingLevel = () => {
 }
 
 .shift-badge--night {
-  background: hsl(240, 100%, 90%);
-  color: hsl(240, 100%, 30%);
+  background: hsl(0, 0%, 40%);
+  color: hsl(0, 0%, 40%);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -595,7 +594,7 @@ const getImprovedStaffingLevel = () => {
 }
 
 .conflicts-section {
-  background: hsl(0, 100%, 97%);
+  background: hsl(0, 0%, 95%);
   border: 1px solid var(--color-danger);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
@@ -720,8 +719,8 @@ const getImprovedStaffingLevel = () => {
 }
 
 .btn--warning:hover {
-  background: hsl(45, 100%, 45%);
-  border-color: hsl(45, 100%, 45%);
+  background: hsl(0, 0%, 55%);
+  border-color: hsl(0, 0%, 55%);
 }
 
 /* Responsive Design */
@@ -730,29 +729,29 @@ const getImprovedStaffingLevel = () => {
     margin: var(--space-4);
     max-height: calc(100vh - 2 * var(--space-4));
   }
-  
+
   .porter-card {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .department-header {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-2);
   }
-  
+
   .department-metrics,
   .info-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .modal-footer {
     flex-direction: column;
     gap: var(--space-4);
     align-items: stretch;
   }
-  
+
   .footer-actions {
     flex-direction: column;
   }

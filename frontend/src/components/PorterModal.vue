@@ -3,7 +3,7 @@
     <div class="modal" @click.stop>
       <div class="modal-header">
         <h2 class="modal-title">
-          <span class="title-icon">{{ isEditing ? '✏️' : '➕' }}</span>
+          
           {{ isEditing ? 'Edit Porter' : 'Add Porter' }}
         </h2>
         <button @click="$emit('cancel')" class="close-btn">✕</button>
@@ -571,7 +571,7 @@ onMounted(() => {
 }
 
 .calendar-day--working {
-  background: hsl(120, 60%, 95%);
+  background: hsl(0, 0%, 45%);
   border-color: var(--color-success);
   color: var(--color-success);
 }

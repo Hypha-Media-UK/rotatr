@@ -2,24 +2,23 @@
   <div class="department-staffing">
     <div class="staffing-header">
       <h2 class="staffing-title">
-        <span class="title-icon">🏥</span>
         Department Staffing Overview
       </h2>
-      
+
       <div class="shift-toggle">
-        <button 
+        <button
           @click="activeShift = 'day'"
           class="shift-btn"
           :class="{ 'shift-btn--active': activeShift === 'day' }"
         >
-          ☀️ Day Shift
+          Day Shift
         </button>
-        <button 
+        <button
           @click="activeShift = 'night'"
           class="shift-btn"
           :class="{ 'shift-btn--active': activeShift === 'night' }"
         >
-          🌙 Night Shift
+          Night Shift
         </button>
       </div>
     </div>
@@ -30,8 +29,8 @@
     </div>
 
     <div v-else class="departments-grid">
-      <div 
-        v-for="department in currentShiftDepartments" 
+      <div
+        v-for="department in currentShiftDepartments"
         :key="department.id"
         class="department-card"
         :class="departmentCardClass(department)"
@@ -45,9 +44,9 @@
               <span v-else class="type-badge type-badge--scheduled">Scheduled</span>
             </div>
           </div>
-          
+
           <div class="staffing-status" :class="staffingStatusClass(department)">
-            <span class="status-icon">{{ staffingStatusIcon(department) }}</span>
+            
             {{ staffingStatusText(department) }}
           </div>
         </div>
@@ -72,25 +71,25 @@
 
           <div class="porter-summary">
             <div class="porter-count">
-              <span class="count-icon">👥</span>
+              
               {{ department.available_porters }} of {{ department.required_porters }} porters
             </div>
-            
+
             <div v-if="department.floor_staff > 0" class="floor-staff">
-              <span class="floor-icon">🏃</span>
+              
               {{ department.floor_staff }} floor staff available
             </div>
           </div>
 
           <div v-if="department.operating_hours" class="operating-hours">
-            <span class="hours-icon">🕐</span>
+            
             {{ department.operating_hours.start }} - {{ department.operating_hours.end }}
           </div>
         </div>
 
         <div v-if="department.alerts && department.alerts.length > 0" class="department-alerts">
-          <div 
-            v-for="alert in department.alerts" 
+          <div
+            v-for="alert in department.alerts"
             :key="alert.id"
             class="mini-alert"
             :class="miniAlertClass(alert)"
@@ -175,15 +174,15 @@ const currentShiftDepartments = computed(() => {
 
 const totalDepartments = computed(() => currentShiftDepartments.value.length)
 
-const adequateStaffing = computed(() => 
+const adequateStaffing = computed(() =>
   currentShiftDepartments.value.filter(d => d.staffing_level === 'Adequate').length
 )
 
-const lowStaffing = computed(() => 
+const lowStaffing = computed(() =>
   currentShiftDepartments.value.filter(d => d.staffing_level === 'Low').length
 )
 
-const criticalStaffing = computed(() => 
+const criticalStaffing = computed(() =>
   currentShiftDepartments.value.filter(d => d.staffing_level === 'Critical').length
 )
 
@@ -198,10 +197,10 @@ const staffingStatusClass = (department: Department) => {
 
 const staffingStatusIcon = (department: Department) => {
   switch (department.staffing_level) {
-    case 'Adequate': return '✅'
-    case 'Low': return '⚠️'
-    case 'Critical': return '🚨'
-    default: return '❓'
+    case 'Adequate': return ''
+    case 'Low': return ''
+    case 'Critical': return ''
+    default: return ''
   }
 }
 
@@ -466,17 +465,17 @@ onMounted(() => {
 }
 
 .staffing-status--adequate {
-  background: hsl(120, 60%, 90%);
+  background: hsl(0, 0%, 90%);
   color: var(--color-success);
 }
 
 .staffing-status--low {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 85%);
+  color: hsl(0, 0%, 30%);
 }
 
 .staffing-status--critical {
-  background: hsl(0, 70%, 90%);
+  background: hsl(0, 0%, 80%);
   color: var(--color-danger);
 }
 
@@ -567,13 +566,13 @@ onMounted(() => {
 }
 
 .mini-alert--critical {
-  background: hsl(0, 70%, 95%);
+  background: hsl(0, 0%, 95%);
   color: var(--color-danger);
 }
 
 .mini-alert--low-staff {
-  background: hsl(45, 100%, 95%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 90%);
+  color: hsl(0, 0%, 30%);
 }
 
 .staffing-summary {
@@ -597,15 +596,15 @@ onMounted(() => {
 }
 
 .summary-stat.adequate {
-  background: hsl(120, 60%, 95%);
+  background: hsl(0, 0%, 95%);
 }
 
 .summary-stat.warning {
-  background: hsl(45, 100%, 95%);
+  background: hsl(0, 0%, 90%);
 }
 
 .summary-stat.critical {
-  background: hsl(0, 70%, 95%);
+  background: hsl(0, 0%, 85%);
 }
 
 .summary-stat .stat-value {
@@ -630,20 +629,20 @@ onMounted(() => {
     text-align: center;
     gap: var(--space-4);
   }
-  
+
   .departments-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .department-header {
     grid-template-columns: 1fr;
     text-align: center;
   }
-  
+
   .staffing-metrics {
     grid-template-columns: 1fr;
   }
-  
+
   .summary-stats {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -653,11 +652,11 @@ onMounted(() => {
   .shift-toggle {
     width: 100%;
   }
-  
+
   .shift-btn {
     flex: 1;
   }
-  
+
   .summary-stats {
     grid-template-columns: 1fr;
   }

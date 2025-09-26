@@ -4,7 +4,7 @@
       <div class="modal-header">
         <div class="shift-header">
           <div class="shift-icon" :class="shiftIconClass(shift.shift_type)">
-            {{ shift.shift_type === 'Day' ? '☀️' : '🌙' }}
+            {{ shift.shift_type === 'Day' ? 'Day' : 'Night' }}
           </div>
           <div class="shift-title">
             <h2 class="shift-name">{{ shift.name }}</h2>
@@ -16,10 +16,10 @@
             </div>
           </div>
         </div>
-        
+
         <div class="header-actions">
           <button @click="$emit('edit')" class="btn btn--primary btn--small">
-            ✏️ Edit
+            Edit
           </button>
           <button @click="$emit('close')" class="close-btn">✕</button>
         </div>
@@ -29,16 +29,16 @@
         <div class="details-grid">
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">🕐</span>
+
               Shift Information
             </h3>
-            
+
             <div class="detail-items">
               <div class="detail-item">
                 <span class="detail-label">Shift Name</span>
                 <span class="detail-value">{{ shift.name }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Type & Identifier</span>
                 <span class="detail-value">
@@ -47,12 +47,12 @@
                   </span>
                 </span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Working Hours</span>
                 <span class="detail-value">{{ formatShiftHours(shift) }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Shift Duration</span>
                 <span class="detail-value">{{ getShiftDuration(shift) }}</span>
@@ -62,26 +62,25 @@
 
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">🔄</span>
               Cycle Pattern
             </h3>
-            
+
             <div class="detail-items">
               <div class="detail-item">
                 <span class="detail-label">Days On</span>
                 <span class="detail-value">{{ shift.days_on }} days</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Days Off</span>
                 <span class="detail-value">{{ shift.days_off }} days</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Cycle Length</span>
                 <span class="detail-value">{{ shift.days_on + shift.days_off }} days</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Pattern</span>
                 <span class="detail-value pattern-text">{{ shift.days_on }} on / {{ shift.days_off }} off</span>
@@ -91,26 +90,26 @@
 
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">🎯</span>
+
               Ground Zero System
             </h3>
-            
+
             <div class="detail-items">
               <div class="detail-item">
                 <span class="detail-label">Ground Zero Date</span>
                 <span class="detail-value">{{ formatDate(shift.ground_zero) }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Offset Days</span>
                 <span class="detail-value">{{ shift.offset_days }} days</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Days Since Ground Zero</span>
                 <span class="detail-value">{{ daysSinceGroundZero }} days</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Current Cycle Position</span>
                 <span class="detail-value cycle-position">
@@ -122,19 +121,19 @@
 
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">👥</span>
+
               Porter Assignments
             </h3>
-            
+
             <div class="porter-summary">
               <div class="summary-stat">
                 <span class="stat-number">{{ porterAssignments.length }}</span>
                 <span class="stat-text">Assigned Porters</span>
               </div>
-              
+
               <div class="porter-list">
-                <div 
-                  v-for="porter in porterAssignments.slice(0, 5)" 
+                <div
+                  v-for="porter in porterAssignments.slice(0, 5)"
                   :key="porter.id"
                   class="porter-item"
                 >
@@ -146,11 +145,11 @@
                     <span class="porter-dept">{{ porter.department_name }}</span>
                   </div>
                 </div>
-                
+
                 <div v-if="porterAssignments.length > 5" class="porter-more">
                   +{{ porterAssignments.length - 5 }} more porters
                 </div>
-                
+
                 <div v-if="porterAssignments.length === 0" class="no-porters">
                   No porters assigned to this shift
                 </div>
@@ -161,17 +160,17 @@
 
         <div class="schedule-visualization">
           <h3 class="section-title">
-            <span class="section-icon">📅</span>
+
             Schedule Visualization - Next 21 Days
           </h3>
-          
+
           <div class="visualization-container">
             <div class="calendar-grid">
-              <div 
-                v-for="day in scheduleVisualization" 
+              <div
+                v-for="day in scheduleVisualization"
                 :key="day.date"
                 class="calendar-day"
-                :class="{ 
+                :class="{
                   'calendar-day--working': day.working,
                   'calendar-day--today': day.isToday,
                   'calendar-day--weekend': day.isWeekend
@@ -186,7 +185,7 @@
                 <span v-if="day.isToday" class="today-indicator">TODAY</span>
               </div>
             </div>
-            
+
             <div class="visualization-legend">
               <div class="legend-item">
                 <span class="legend-indicator legend-indicator--working"></span>
@@ -210,14 +209,14 @@
 
         <div class="interconnection-analysis">
           <h3 class="section-title">
-            <span class="section-icon">🔗</span>
+
             System Interconnections
           </h3>
-          
+
           <div class="interconnection-grid">
             <div class="interconnection-item">
               <div class="interconnection-header">
-                <span class="interconnection-icon">👥</span>
+
                 <span class="interconnection-title">Porter Impact</span>
               </div>
               <div class="interconnection-content">
@@ -225,10 +224,9 @@
                 <p>Changes will affect their individual schedules and offsets</p>
               </div>
             </div>
-            
+
             <div class="interconnection-item">
               <div class="interconnection-header">
-                <span class="interconnection-icon">🏥</span>
                 <span class="interconnection-title">Department Coverage</span>
               </div>
               <div class="interconnection-content">
@@ -236,10 +234,10 @@
                 <p>May trigger low staffing alerts when porters are off duty</p>
               </div>
             </div>
-            
+
             <div class="interconnection-item">
               <div class="interconnection-header">
-                <span class="interconnection-icon">⚠️</span>
+
                 <span class="interconnection-title">Alert System</span>
               </div>
               <div class="interconnection-content">
@@ -262,13 +260,13 @@
             <span class="info-value">{{ formatDateTime(shift.updated_at) }}</span>
           </div>
         </div>
-        
+
         <div class="footer-actions">
           <button @click="$emit('close')" class="btn btn--secondary">
             Close
           </button>
           <button @click="$emit('edit')" class="btn btn--primary">
-            ✏️ Edit Shift
+            Edit Shift
           </button>
         </div>
       </div>
@@ -327,17 +325,17 @@ const scheduleVisualization = computed(() => {
   const days = []
   const today = new Date()
   const groundZero = new Date(props.shift.ground_zero)
-  
+
   for (let i = 0; i < 21; i++) {
     const date = new Date(today)
     date.setDate(today.getDate() + i)
-    
+
     // Calculate if this shift is working on this date
     const daysSinceGroundZero = Math.floor((date.getTime() - groundZero.getTime()) / (1000 * 60 * 60 * 24))
     const adjustedDays = daysSinceGroundZero - props.shift.offset_days
     const cycleLength = props.shift.days_on + props.shift.days_off
     const cyclePosition = adjustedDays % cycleLength
-    
+
     let working = false
     if (cyclePosition < 0) {
       const normalizedPosition = cyclePosition + cycleLength
@@ -345,10 +343,10 @@ const scheduleVisualization = computed(() => {
     } else {
       working = cyclePosition >= 0 && cyclePosition < props.shift.days_on
     }
-    
+
     const dayOfWeek = date.getDay()
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
-    
+
     days.push({
       date: date.toISOString().split('T')[0],
       dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
@@ -359,7 +357,7 @@ const scheduleVisualization = computed(() => {
       isWeekend
     })
   }
-  
+
   return days
 })
 
@@ -385,15 +383,15 @@ const formatShiftHours = (shift: Shift) => {
 const getShiftDuration = (shift: Shift) => {
   const startMinutes = timeToMinutes(shift.start_time)
   const endMinutes = timeToMinutes(shift.end_time)
-  
+
   let duration = endMinutes - startMinutes
   if (duration < 0) {
     duration += 24 * 60 // Handle overnight shifts
   }
-  
+
   const hours = Math.floor(duration / 60)
   const minutes = duration % 60
-  
+
   return `${hours}h ${minutes > 0 ? minutes + 'm' : ''}`
 }
 
@@ -406,11 +404,11 @@ const getCurrentCyclePosition = () => {
   const adjustedDays = daysSinceGroundZero.value - props.shift.offset_days
   const cycleLength = props.shift.days_on + props.shift.days_off
   const cyclePosition = adjustedDays % cycleLength
-  
+
   if (cyclePosition < 0) {
     return cyclePosition + cycleLength + 1
   }
-  
+
   return cyclePosition + 1
 }
 
@@ -495,11 +493,11 @@ const formatDateTime = (dateString: string) => {
 }
 
 .shift-icon--day {
-  background: hsl(45, 100%, 90%);
+  background: hsl(0, 0%, 90%);
 }
 
 .shift-icon--night {
-  background: hsl(240, 100%, 90%);
+  background: hsl(0, 0%, 85%);
 }
 
 .shift-name {
@@ -523,13 +521,13 @@ const formatDateTime = (dateString: string) => {
 }
 
 .shift-badge--day {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 90%);
+  color: hsl(0, 0%, 30%);
 }
 
 .shift-badge--night {
-  background: hsl(240, 100%, 90%);
-  color: hsl(240, 100%, 30%);
+  background: hsl(0, 0%, 85%);
+  color: hsl(0, 0%, 25%);
 }
 
 .meta-text {
@@ -759,7 +757,7 @@ const formatDateTime = (dateString: string) => {
 }
 
 .calendar-day--working {
-  background: hsl(120, 60%, 95%);
+  background: hsl(0, 0%, 95%);
   border-color: var(--color-success);
   color: var(--color-success);
 }
@@ -946,41 +944,41 @@ const formatDateTime = (dateString: string) => {
     margin: var(--space-4);
     max-height: calc(100vh - 2 * var(--space-4));
   }
-  
+
   .shift-header {
     flex-direction: column;
     text-align: center;
     gap: var(--space-3);
   }
-  
+
   .header-actions {
     flex-direction: column;
     width: 100%;
   }
-  
+
   .details-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .calendar-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-  
+
   .visualization-legend {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .interconnection-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .modal-footer {
     flex-direction: column;
     gap: var(--space-4);
     align-items: stretch;
   }
-  
+
   .footer-actions {
     flex-direction: column;
   }
@@ -990,7 +988,7 @@ const formatDateTime = (dateString: string) => {
   .calendar-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .footer-info {
     flex-direction: column;
     gap: var(--space-2);

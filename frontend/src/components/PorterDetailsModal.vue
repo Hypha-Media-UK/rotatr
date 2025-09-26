@@ -16,10 +16,10 @@
             </div>
           </div>
         </div>
-        
+
         <div class="header-actions">
           <button @click="$emit('edit')" class="btn btn--primary btn--small">
-            ✏️ Edit
+            Edit
           </button>
           <button @click="$emit('close')" class="close-btn">✕</button>
         </div>
@@ -29,28 +29,27 @@
         <div class="details-grid">
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">👤</span>
               Personal Information
             </h3>
-            
+
             <div class="detail-items">
               <div class="detail-item">
                 <span class="detail-label">Full Name</span>
                 <span class="detail-value">{{ porter.first_name }} {{ porter.last_name }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Employee ID</span>
                 <span class="detail-value">{{ porter.employee_id || 'Not assigned' }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Employment Status</span>
                 <span class="detail-value" :class="statusClass(porter)">
                   {{ getPorterStatus(porter) }}
                 </span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Start Date</span>
                 <span class="detail-value">{{ formatDate(porter.start_date) }}</span>
@@ -60,16 +59,15 @@
 
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">🏥</span>
               Department & Shift
             </h3>
-            
+
             <div class="detail-items">
               <div class="detail-item">
                 <span class="detail-label">Department</span>
                 <span class="detail-value">{{ porter.department_name }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Shift Type</span>
                 <span class="detail-value">
@@ -78,12 +76,12 @@
                   </span>
                 </span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Shift Hours</span>
                 <span class="detail-value">{{ getShiftHours(porter.shift_type) }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Shift Offset</span>
                 <span class="detail-value">{{ porter.shift_offset_days }} days</span>
@@ -93,26 +91,26 @@
 
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">⏰</span>
+              
               Working Hours
             </h3>
-            
+
             <div class="detail-items">
               <div class="detail-item">
                 <span class="detail-label">Contracted Hours</span>
                 <span class="detail-value">{{ porter.contracted_hours || 40 }} hours/week</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Shift Pattern</span>
                 <span class="detail-value">{{ getShiftPattern(porter.shift_type) }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Next Shift</span>
                 <span class="detail-value next-shift">{{ getNextShiftDate(porter) }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Days Off</span>
                 <span class="detail-value">{{ getDaysOff(porter) }}</span>
@@ -122,21 +120,20 @@
 
           <div class="details-section">
             <h3 class="section-title">
-              <span class="section-icon">📊</span>
               System Information
             </h3>
-            
+
             <div class="detail-items">
               <div class="detail-item">
                 <span class="detail-label">Created</span>
                 <span class="detail-value">{{ formatDateTime(porter.created_at) }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Last Updated</span>
                 <span class="detail-value">{{ formatDateTime(porter.updated_at) }}</span>
               </div>
-              
+
               <div class="detail-item">
                 <span class="detail-label">Porter ID</span>
                 <span class="detail-value">#{{ porter.id }}</span>
@@ -147,19 +144,19 @@
 
         <div class="schedule-preview">
           <h3 class="section-title">
-            <span class="section-icon">📅</span>
+            
             Schedule Preview - Next 14 Days
           </h3>
-          
+
           <div class="calendar-container">
             <div class="calendar-grid">
-              <div 
-                v-for="day in schedulePreview" 
+              <div
+                v-for="day in schedulePreview"
                 :key="day.date"
                 class="calendar-day"
-                :class="{ 
+                :class="{
                   'calendar-day--working': day.working,
-                  'calendar-day--today': day.isToday 
+                  'calendar-day--today': day.isToday
                 }"
               >
                 <span class="day-name">{{ day.dayName }}</span>
@@ -170,7 +167,7 @@
                 </span>
               </div>
             </div>
-            
+
             <div class="calendar-legend">
               <div class="legend-item">
                 <span class="legend-indicator legend-indicator--working"></span>
@@ -194,7 +191,7 @@
           Close
         </button>
         <button @click="$emit('edit')" class="btn btn--primary">
-          ✏️ Edit Porter
+          Edit Porter
         </button>
       </div>
     </div>
@@ -238,17 +235,17 @@ const emit = defineEmits<{
 const schedulePreview = computed(() => {
   const days = []
   const today = new Date()
-  
+
   for (let i = 0; i < 14; i++) {
     const date = new Date(today)
     date.setDate(today.getDate() + i)
-    
+
     // Simple shift calculation for preview
     const daysSinceGroundZero = Math.floor((date.getTime() - new Date('2024-01-01').getTime()) / (1000 * 60 * 60 * 24))
     const adjustedDays = daysSinceGroundZero - props.porter.shift_offset_days
     const cyclePosition = adjustedDays % 8
     const working = props.porter.shift_type !== 'Relief' && cyclePosition >= 0 && cyclePosition < 4
-    
+
     days.push({
       date: date.toISOString().split('T')[0],
       dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
@@ -258,7 +255,7 @@ const schedulePreview = computed(() => {
       isToday: i === 0
     })
   }
-  
+
   return days
 })
 
@@ -300,16 +297,16 @@ const getShiftPattern = (shiftType: string) => {
 
 const getNextShiftDate = (porter: Porter) => {
   if (porter.shift_type === 'Relief') return 'As assigned'
-  
+
   // Simple calculation for next working day
   const today = new Date()
   const tomorrow = new Date(today)
   tomorrow.setDate(today.getDate() + 1)
-  
-  return tomorrow.toLocaleDateString('en-US', { 
+
+  return tomorrow.toLocaleDateString('en-US', {
     weekday: 'long',
-    month: 'short', 
-    day: 'numeric' 
+    month: 'short',
+    day: 'numeric'
   })
 }
 
@@ -320,7 +317,7 @@ const getDaysOff = (porter: Porter) => {
 
 const formatDate = (dateString?: string) => {
   if (!dateString) return 'Not specified'
-  
+
   const date = new Date(dateString)
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -415,17 +412,17 @@ const formatDateTime = (dateString: string) => {
 }
 
 .meta-badge--day {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 55%);
+  color: hsl(0, 0%, 55%);
 }
 
 .meta-badge--night {
-  background: hsl(240, 100%, 90%);
-  color: hsl(240, 100%, 30%);
+  background: hsl(0, 0%, 40%);
+  color: hsl(0, 0%, 40%);
 }
 
 .meta-badge--relief {
-  background: hsl(120, 60%, 90%);
+  background: hsl(0, 0%, 45%);
   color: var(--color-success);
 }
 
@@ -530,17 +527,17 @@ const formatDateTime = (dateString: string) => {
 }
 
 .shift-badge--day {
-  background: hsl(45, 100%, 90%);
-  color: hsl(45, 100%, 30%);
+  background: hsl(0, 0%, 55%);
+  color: hsl(0, 0%, 55%);
 }
 
 .shift-badge--night {
-  background: hsl(240, 100%, 90%);
-  color: hsl(240, 100%, 30%);
+  background: hsl(0, 0%, 40%);
+  color: hsl(0, 0%, 40%);
 }
 
 .shift-badge--relief {
-  background: hsl(120, 60%, 90%);
+  background: hsl(0, 0%, 45%);
   color: var(--color-success);
 }
 
@@ -592,7 +589,7 @@ const formatDateTime = (dateString: string) => {
 }
 
 .calendar-day--working {
-  background: hsl(120, 60%, 95%);
+  background: hsl(0, 0%, 45%);
   border-color: var(--color-success);
   color: var(--color-success);
 }
@@ -681,31 +678,31 @@ const formatDateTime = (dateString: string) => {
     margin: var(--space-4);
     max-height: calc(100vh - 2 * var(--space-4));
   }
-  
+
   .porter-header {
     flex-direction: column;
     text-align: center;
     gap: var(--space-3);
   }
-  
+
   .header-actions {
     flex-direction: column;
     width: 100%;
   }
-  
+
   .details-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .calendar-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-  
+
   .calendar-legend {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .modal-footer {
     flex-direction: column;
   }
@@ -715,13 +712,13 @@ const formatDateTime = (dateString: string) => {
   .calendar-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .detail-item {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-1);
   }
-  
+
   .detail-value {
     text-align: left;
   }

@@ -3,60 +3,53 @@
     <div class="nav-content">
       <div class="nav-brand">
         <RouterLink to="/" class="brand-link">
-          <span class="brand-icon">🏥</span>
           <span class="brand-text">Porter Shift Management</span>
         </RouterLink>
       </div>
-      
+
       <div class="nav-links">
-        <RouterLink 
-          to="/" 
+        <RouterLink
+          to="/"
           class="nav-link"
           :class="{ 'nav-link--active': $route.name === 'home' }"
         >
-          <span class="nav-icon">📊</span>
           <span class="nav-text">Dashboard</span>
         </RouterLink>
-        
-        <RouterLink 
-          to="/configure" 
+
+        <RouterLink
+          to="/configure"
           class="nav-link"
           :class="{ 'nav-link--active': $route.name === 'configure' }"
         >
-          <span class="nav-icon">⚙️</span>
           <span class="nav-text">Configure</span>
         </RouterLink>
       </div>
-      
+
       <div class="nav-actions">
-        <button 
+        <button
           @click="toggleTheme"
           class="action-btn"
           :title="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
         >
-          <span v-if="isDarkMode">☀️</span>
-          <span v-else>🌙</span>
+          <span v-if="isDarkMode">Light</span>
+          <span v-else>Dark</span>
         </button>
-        
+
         <div class="user-menu">
           <button class="user-btn" @click="toggleUserMenu">
-            <span class="user-avatar">👤</span>
             <span class="user-name">Admin</span>
-            <span class="dropdown-arrow" :class="{ 'dropdown-arrow--open': isUserMenuOpen }">▼</span>
+
           </button>
-          
+
           <div v-if="isUserMenuOpen" class="user-dropdown">
             <a href="#" class="dropdown-item">
-              <span class="item-icon">👤</span>
               Profile
             </a>
             <a href="#" class="dropdown-item">
-              <span class="item-icon">⚙️</span>
               Settings
             </a>
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item">
-              <span class="item-icon">🚪</span>
               Logout
             </a>
           </div>
@@ -311,19 +304,19 @@ onUnmounted(() => {
     padding: 0 var(--space-4);
     gap: var(--space-4);
   }
-  
+
   .brand-text {
     display: none;
   }
-  
+
   .nav-text {
     display: none;
   }
-  
+
   .nav-link {
     padding: var(--space-2);
   }
-  
+
   .user-name {
     display: none;
   }
@@ -334,7 +327,7 @@ onUnmounted(() => {
     grid-template-columns: auto 1fr;
     gap: var(--space-3);
   }
-  
+
   .nav-actions {
     grid-column: 1 / -1;
     justify-content: flex-end;
@@ -342,11 +335,11 @@ onUnmounted(() => {
     padding-top: var(--space-2);
     border-top: 1px solid var(--color-neutral-200);
   }
-  
+
   .app-navigation {
     position: relative;
   }
-  
+
   .nav-content {
     height: auto;
     padding: var(--space-3);
